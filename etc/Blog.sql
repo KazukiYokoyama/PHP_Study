@@ -17,38 +17,45 @@ DROP DATABASE IF EXISTS `Blog`;
 CREATE DATABASE IF NOT EXISTS `Blog` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `Blog`;
 
+-- ユーザー作成 phpstudy
+CREATE USER IF NOT EXISTS 'phpstudy'@'localhost' IDENTIFIED BY 'phpstudy';
+-- phpstudyにBlogデータベースの操作権限を付与する
+GRANT ALL PRIVILEGES ON Blog.* TO 'phpstudy'@'localhost';
+-- 設定を反映
+FLUSH PRIVILEGES;
+
 --  テーブル Blog.Accounts の構造をダンプしています
 DROP TABLE IF EXISTS `Accounts`;
 CREATE TABLE IF NOT EXISTS `Accounts` (
-  `account_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `account_name` varchar(20) DEFAULT NULL,
-  `email` varchar(100) DEFAULT NULL,
-  `password_hash` varchar(255) DEFAULT NULL,
+  `account_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'アカウントID',
+  `account_name` varchar(20) DEFAULT NULL COMMENT 'アカウント名',
+  `email` varchar(100) DEFAULT NULL COMMENT 'メールアドレス',
+  `password_hash` varchar(255) DEFAULT NULL COMMENT 'パスワードハッシュ',
   PRIMARY KEY (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='サービス利用者のアカウントを保持する';
 
 -- エクスポートするデータが選択されていません
 --  テーブル Blog.Articles の構造をダンプしています
 DROP TABLE IF EXISTS `Articles`;
 CREATE TABLE IF NOT EXISTS `Articles` (
-  `article_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `account_id` bigint(20) unsigned DEFAULT NULL,
-  `title` varchar(50) DEFAULT NULL,
-  `body` text DEFAULT NULL,
+  `article_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '記事ID',
+  `account_id` bigint(20) unsigned DEFAULT NULL COMMENT 'アカウントID（=Accounts:account_id）',
+  `title` varchar(50) DEFAULT NULL COMMENT 'タイトル',
+  `body` text DEFAULT NULL COMMENT '本文',
   PRIMARY KEY (`article_id`),
   KEY `account_id` (`account_id`),
   CONSTRAINT `Articles_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `Accounts` (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='ブログの記事を保持する';
 
 -- エクスポートするデータが選択されていません
 --  テーブル Blog.Logs の構造をダンプしています
 DROP TABLE IF EXISTS `Logs`;
 CREATE TABLE IF NOT EXISTS `Logs` (
-  `log_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
-  `date_reported` date DEFAULT NULL,
-  `description` text DEFAULT NULL,
+  `log_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ログID',
+  `date_reported` date DEFAULT NULL COMMENT '発行日付',
+  `description` text DEFAULT NULL COMMENT '内容',
   PRIMARY KEY (`log_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='操作ログを保持する';
 
 -- エクスポートするデータが選択されていません
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
