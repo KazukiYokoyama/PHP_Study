@@ -1,7 +1,5 @@
 <?php
 
-include ('../module/view_extend.php');
-
 // urlパラメータ取得
 $params = explode('/', $_GET['url']);
 
