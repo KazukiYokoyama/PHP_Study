@@ -1,8 +1,10 @@
 <?php
 
+include ('../module/Page.php');
+
 //###########################################
 // Controller 
-// リクエストに応じたモジュールの呼び出しを行う
+// リクエストに応じたモジュールを実行する
 //###########################################
 Class Controller{
 
@@ -17,6 +19,9 @@ Class Controller{
         if($page !== ''){ $this->page = $page; }
     }
 
+    /**
+     * 実行するモジュールの判断を行う
+    */
     public function Main(){
 
         // Model読み込み
@@ -27,17 +32,10 @@ Class Controller{
             // extract($ret);
         }
 
-        // View読み込み
-        if(file_exists('../views/'.$this->page.'.view.php')){
-            include ('../views/'.$this->page.'.view.php');
-            $page_print = new PagePrint();
-            $page_print->PageView();
-        }else{
-            // ページが無い場合、404（Not Found）を表示する
-            echo $this->page . ' (´・ω・｀) 無いよ';
-        }
+        $Page = new Page();
+        $Page->setPage($this->page);
+        $Page->Print();
     }
 }
-
 
 ?>

@@ -1,24 +1,3 @@
-<?php
-//###########################################
-// View　アカウント登録画面
-//###########################################
-
-include ('../views/layouts/public_default.layout.php');
-
-/*
-　表示するページの内容を記述する
-　一般公開画面 デフォルト のレイアウトを継承
- */
-Class PagePrint extends PublicDefaultLayout{
-  function __construct() {
-        // ページタイトル指定
-        $this->setTitle('アカウント登録');
-    }
-
-    // bodyの記述
-    protected function Body(){
-?>
-
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="#">Navbar</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -63,8 +42,3 @@ Class PagePrint extends PublicDefaultLayout{
     </form>
   </div>
 </div>
-
-<?php
-    }
-}
-?>

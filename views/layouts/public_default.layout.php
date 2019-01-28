@@ -2,14 +2,7 @@
 //###########################################
 // Layout 一般公開画面 デフォルト
 //###########################################
-
-Class PublicDefaultLayout{
-    protected $title = '';    // ページタイトル
-
-    // ページ内容出力
-    public function PageView(){
 ?>
-
 <!doctype html>
 <html lang="ja">
   <head>
@@ -32,17 +25,4 @@ Class PublicDefaultLayout{
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
   </body>
 </html>
-
-<?php
-    }
-
-    // ページタイトルの設定
-    protected function setTitle($title){
-        $this->title = $title;
-    }
-
-    // bodyの設定
-    protected function Body(){}
-}
-?>
 
