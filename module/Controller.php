@@ -24,16 +24,19 @@ Class Controller{
     */
     public function Main(){
 
-        // Model読み込み
-        if(file_exists('../models/'.$this->page.'.php')){
-            include ('../models/'.$this->page.'.php');
-            // Model::handleから実行結果を取得
-            // $ret = handle($params);
-            // extract($ret);
-        }
-
         $Page = new Page();
         $Page->setPage($this->page);
+
+        // Modelの処理を実行
+        if(file_exists('../models/'.$this->page.'.php')){
+            include ('../models/'.$this->page.'.php');
+
+            if (function_exists('handle')) {
+                // Model::handleから実行結果を取得
+                $Page->setModel( handle($this->url) );
+            }
+        }
+
         $Page->Print();
     }
 }

@@ -8,6 +8,7 @@ Class Page{
     private $layout;    // ページのレイアウト
     private $page;      // Viewのpath
     private $title;     // ページのタイトル
+    private $model;     // Modelの実行結果
 
     /**
      * ページの内容を表示する
@@ -17,6 +18,7 @@ Class Page{
         $this->PageSetting();
 
         if(file_exists('../views/'.$this->page.'.view.php')){
+            // extract($ret);
             require('../views/layouts/'.$this->layout.'.layout.php');
         }else{
             // ページが無い場合、404（Not Found）を表示する
@@ -26,12 +28,21 @@ Class Page{
 
     // bodyの読み込み
     protected function Body(){
-        require('../views/'.$this->page.'.view.php');
+        $view_path = '../views/'.$this->page.'.view.php';
+        if(is_array($this->model)){
+            extract($this->model);
+        }
+        require($view_path);
     }
 
-    // ページ指定
+    // ページをセット
     public function setPage(string $page){
         $this->page = $page;
+    }
+
+    // Modelの実行結果をセット
+    public function setModel($model){
+        $this->model = $model;
     }
 
     /**
