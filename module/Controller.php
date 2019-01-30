@@ -35,12 +35,11 @@ Class Controller{
 
             if (function_exists('handle')) {
                 // Model::handleから実行結果を取得
-                $Page->setModel( handle($this->url) );
+                $Page->setData( handle($this->url) );
             }
         }
 
         // 編集したページを表示
-        $Page->setPage($this->page);
         $Page->Print();
     }
 }

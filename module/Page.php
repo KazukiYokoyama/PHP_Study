@@ -5,22 +5,17 @@
 // タイトルやレイアウト等を適切な組み合わせにして表示する
 //###########################################
 Class Page{
-    private $layout;    // ページのレイアウト
     private $page;      // Viewのpath
-    private $title;     // ページのタイトル
-    private $model;     // Modelの実行結果
+    private $data;      // Modelの実行結果
 
     /**
      * ページの内容を表示する
      */
     public function Print(){
-
-        $this->PageSetting();
-
-        if(file_exists('../views/'.$this->page.'.view.php')){
-            // ファイルが有る場合、指定のレイアウトを読み込む
+        if(file_exists('../views/'.$this->getData('page').'.view.php')){
+            // ページが有る場合、指定のレイアウトを読み込む
             // 分かりづらいが、レイアウトの方でBody()を呼び出している
-            require('../views/layouts/'.$this->layout.'.layout.php');
+            require('../views/layouts/'.$this->getData('layout').'.layout.php');
         }else{
             // ページが無い場合、404（Not Found）を表示する
             echo ' (´・ω・｀) 無いよ';
@@ -28,49 +23,21 @@ Class Page{
     }
 
     // bodyの読み込み
-    protected function Body(){
-        $view_path = '../views/'.$this->page.'.view.php';
-        if(is_array($this->model)){
-            extract($this->model);
-        }
-        require($view_path);
+    private function Body(){
+        require('../views/'.$this->getData('page').'.view.php');
     }
 
-    // ページをセット
-    public function setPage(string $page){
-        $this->page = $page;
+    // Modelから渡されたデータの取得
+    private function getData(string $property){
+        if(isset($this->data[$property])){
+            return (string) $this->data[$property];
+        }
+        return '';
     }
 
     // Modelの実行結果をセット
-    public function setModel($model){
-        $this->model = $model;
-    }
-
-    /**
-     * ページ毎のタイトルとテンプレートの指定
-     * 新しいページを追加する際はここに追記する
-     */
-    private function PageSetting(){
-        switch ($this->page) {
-            case 'home':
-                $this->title = 'トップページ';
-                break;
-            case 'signup':
-                $this->title = 'アカウント登録';
-                break;
-            case 'registered':
-                $this->title = 'アカウント登録完了';
-                break;
-            /*
-            case 'test':
-                $this->title = 'テストページ';
-                $this->layout = 'debug';
-                break;
-            */
-        }
-
-        // レイアウトのデフォルト指定
-        if(!isset($this->layout)){ $this->layout = 'public_default'; }
+    public function setData($data){
+        $this->data = $data;
     }
 }
 

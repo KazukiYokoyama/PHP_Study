@@ -1,2 +1,3 @@
 <h1>Blog Home</h1>
-<?= $str ?>
+<?= $this->getData('msg'); ?>
+<?= $this->getData('test'); ?>

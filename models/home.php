@@ -4,7 +4,12 @@
 //###########################################
 
 function handle($params){
-    return array('str'=>'Hello World!');
+    return [
+        'page' => 'home',
+        'layout' => 'public_default',
+        'title' => 'トップページ',
+        'msg' => 'Hello World!'
+    ];
 }
 
 ?>
