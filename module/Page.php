@@ -18,7 +18,8 @@ Class Page{
         $this->PageSetting();
 
         if(file_exists('../views/'.$this->page.'.view.php')){
-            // extract($ret);
+            // ファイルが有る場合、指定のレイアウトを読み込む
+            // 分かりづらいが、レイアウトの方でBody()を呼び出している
             require('../views/layouts/'.$this->layout.'.layout.php');
         }else{
             // ページが無い場合、404（Not Found）を表示する
@@ -47,6 +48,7 @@ Class Page{
 
     /**
      * ページ毎のタイトルとテンプレートの指定
+     * 新しいページを追加する際はここに追記する
      */
     private function PageSetting(){
         switch ($this->page) {
@@ -59,6 +61,12 @@ Class Page{
             case 'registered':
                 $this->title = 'アカウント登録完了';
                 break;
+            /*
+            case 'test':
+                $this->title = 'テストページ';
+                $this->layout = 'debug';
+                break;
+            */
         }
 
         // レイアウトのデフォルト指定
