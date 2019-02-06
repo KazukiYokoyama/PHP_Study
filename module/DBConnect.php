@@ -1,18 +1,20 @@
 <?php
 
+/**
+ * このファイル内だけでしか使用しない場合、定数宣言を行う旨味がなくなってしまう。
+ * DBへの接続情報を再利用したいのであれば、別ファイルに記述するように変更しましょう。
+ */
 define('HOST', 'localhost');
-define('DATABASE', 'Blog');
+define('DATABASE', 'Blogs');
 define('USER', 'phpstudy');
 define('PASSWORD', 'phpstudy');
 
 //###########################################
-// 　データベース接続
+// PDOによるデータベースへの接続を行う
 //###########################################
-
 class DB_Connect{
-    //データベースの接続情報
-    public $pdo;
-    
+    public $pdo;    //データベースの接続情報
+
     function __construct(){
         try{
             //データベースに接続
@@ -29,6 +31,12 @@ class DB_Connect{
             //接続失敗した場合エラー内容をログに残す
             $msg = "データベースへの接続に失敗しました<br>(" . $e->getMessage() . ")";
             //エラーログに書き込む
+            /**
+             * ちゃんとエラーログに出力してからpullリクだしてください。
+             * 例）
+             * error_log("データベースへの接続に失敗しました(".$e->getMessage().")", 0);
+             * header("Location: /error");    // エラーページにリダイレクト
+             */
         }
     }
 
