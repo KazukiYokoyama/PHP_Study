@@ -19,8 +19,6 @@ class DB_Connect{
                 ]
             );
         }catch(PDOException $e){
-            //接続失敗した場合エラー内容をログに残す
-            $msg = "データベースへの接続に失敗しました<br>(" . $e->getMessage() . ")";
             //エラーログに書き込む
             error_log("データベースへの接続に失敗しました(".$e->getMessage().")", 0);
             header("Location: /error");    // エラーページにリダイレクト
