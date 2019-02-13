@@ -3,16 +3,18 @@
     <div class="text-center">
       <h1>ログイン画面</h1>
     </div>
-    <form>
+    <form action="" method="post">
       <div class="form-group">
         <label for="exampleInputEmail1">Email address</label>
-        <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+        <input type="email" name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email" value="<?php if (!empty($_POST["email"])) {echo htmlspecialchars($_POST["email"], ENT_QUOTES);} ?>">
+        <?php echo htmlspecialchars($errorMessage, ENT_QUOTES); ?>
       </div>
       <div class="form-group">
         <label for="exampleInputPassword1">Password</label>
-        <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        <input type="password" name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+        <?php echo htmlspecialchars($errorMessage, ENT_QUOTES); ?>
       </div>
-      <button type="submit" class="btn btn-primary">Submit</button>
+      <input type="submit" name="login" class="btn btn-primary" value="login">
     </form>
   </div>
 </div>
