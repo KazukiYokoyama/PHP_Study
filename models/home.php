@@ -3,13 +3,15 @@
 // Model　トップページ
 //###########################################
 
-function handle($params){
-    return [
-        'page' => 'home',
-        'layout' => 'public_default',
-        'title' => 'トップページ',
-        'msg' => 'Hello World!'
-    ];
+class Home extends Model{
+    function __construct() {
+        $this->page_data = [
+            'page' => 'home',
+            'layout' => 'public_default',
+            'title' => 'トップページ',
+            'msg' => 'Hello World!'
+        ];
+    }
 }
 
 ?>
