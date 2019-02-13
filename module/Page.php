@@ -28,7 +28,7 @@ Class Page{
     }
 
     // Modelから渡されたデータの取得
-    private function getData(string $property){
+    private function getData(string $property) :string{
         if(isset($this->data[$property])){
             return (string) $this->data[$property];
         }
@@ -36,7 +36,7 @@ Class Page{
     }
 
     // Modelの実行結果をセット
-    public function setData($data){
+    public function setData(array $data){
         $this->data = $data;
     }
 }
