@@ -5,7 +5,7 @@
 
 function handle($params){
     return [
-        'page' => 'signup',
+        'page' => 'register',
         'layout' => 'public_default',
         'title' => 'アカウント登録'
     ];
