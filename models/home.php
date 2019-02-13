@@ -4,13 +4,14 @@
 //###########################################
 
 class Home extends Model{
-    function __construct() {
-        $this->page_data = [
-            'page' => 'home',
-            'layout' => 'public_default',
-            'title' => 'トップページ',
-            'msg' => 'Hello World!'
-        ];
+    protected $page_data = [
+        'page' => 'home',
+        'layout' => 'public_default',
+        'title' => 'トップページ'
+    ];
+
+    public function Action(){
+        $this->page_data['msg'] = array_shift($this->url);
     }
 }
 

@@ -4,13 +4,11 @@
 //###########################################
 
 class Login extends Model{
-    function __construct() {
-        $this->page_data = [
-            'page' => 'login',
-            'layout' => 'public_default',
-            'title' => 'ログイン画面'
-        ];
-    }
+    protected $page_data = [
+        'page' => 'login',
+        'layout' => 'public_default',
+        'title' => 'ログイン画面'
+    ];
 }
 
 ?>
