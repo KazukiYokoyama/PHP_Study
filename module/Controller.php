@@ -1,6 +1,6 @@
 <?php
 
-include ('../module/Page.php');
+include_once ('../module/Page.php');
 
 //###########################################
 // Controller 
@@ -33,10 +33,9 @@ Class Controller{
         if(file_exists('../models/'.$this->page.'.php')){
             include ('../models/'.$this->page.'.php');
 
-            if (function_exists('handle')) {
-                // Model::handleから実行結果を取得
-                $Page->setData( handle($this->url) );
-            }
+            // Modelから実行結果を取得
+            $model = new $this->page;
+            $Page->setData( $model->getData() );
         }
 
         // 編集したページを表示
