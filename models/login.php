@@ -12,15 +12,18 @@ function handle($params){
     ];
 }
 
+// セッションの有効期限を1時間に設定
+session_set_cookie_params(60 * 60);
+
 //セッションスタート
 session_start();
 
+//エラーメッセージの初期化
 $errorMessage = '';
-
 
 //ログインボタンが押下された場合
 if(isset($_POST["login"])){
-    //入力チェック
+    //入力の有無をチェック
     if(empty($_POST["email"])){
         $errorMessage = 'メールアドレスを入力してください。';
     }
@@ -45,7 +48,7 @@ if(isset($_POST["login"])){
              //データベース接続
             $DB = new DB_Connect();
             $stmt = $DB->prepare('SELECT * FROM Accounts WHERE email = :email');
-            $stmt->execute([':name'=>$email]);
+            $stmt->execute([':email'=>$email]);
 
             if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                 //パスワードのチェック
