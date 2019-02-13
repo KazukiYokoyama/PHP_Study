@@ -3,9 +3,9 @@
 // Model　エラーページ
 //###########################################
 
-function handle($params){
-    return [
-        'page' => 'error',
+class Failure extends Model{
+    protected $page_data = [
+        'page' => 'failure',
         'layout' => 'public_default',
         'title' => 'エラーが発生しました'
     ];

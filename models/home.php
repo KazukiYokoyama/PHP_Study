@@ -3,13 +3,16 @@
 // Model　トップページ
 //###########################################
 
-function handle($params){
-    return [
+class Home extends Model{
+    protected $page_data = [
         'page' => 'home',
         'layout' => 'public_default',
-        'title' => 'トップページ',
-        'msg' => 'Hello World!'
+        'title' => 'トップページ'
     ];
+
+    public function Action(){
+        $this->page_data['msg'] = array_shift($this->url);
+    }
 }
 
 ?>
