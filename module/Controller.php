@@ -38,6 +38,11 @@ Class Controller{
             $page_data = $model->getData();
         }
 
+        // リクエストがAjaxの場合、処理を終了する
+        if(isset($_SERVER['HTTP_X_REQUESTED_WITH']) && (strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) === 'xmlhttprequest')) {
+            exit;
+        }
+
         // 編集したページを表示
         $Page = new Page();
         $Page->setData($page_data);
