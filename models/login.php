@@ -76,7 +76,7 @@ class LoginAuthentication{
         /**
          * hashをJsonに変更
          */
-        echo json_encode(['error' => $error_msg]);
+        echo json_encode(['Error' => $error_msg]);
     }
 }
 
