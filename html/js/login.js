@@ -9,8 +9,10 @@ var LoginAthentication = new Vue({
             email:'',             // メールアドレス
             password:''           // パスワード
         },
-        // エラー内容
-        Error:[]
+        // アラートメッセージ
+        Alert:{
+            Warning:[]
+        }
     },
     mixins:[AxiosAjax],
     methods:{
@@ -22,13 +24,17 @@ var LoginAthentication = new Vue({
             params.append("email", this.Athentication.email);
             params.append("password", this.Athentication.password);
 
+            // Ajax Post
             // ログイン認証APIに送信
-            this.Post('/login/authentication', params);
-        },
-        // ログイン認証完了後処理
-        Action(res){
-            this.Error = res.data.Error;
-
+            axios.post('/login/authentication', params, axios_post_config)
+            .then(function(res){
+                // アラートメッセージの取得
+                LoginAthentication.Alert = res.data.Alert;
+                console.log(Object.keys(LoginAthentication.Alert.Warning).length);
+            })
+            .catch(function (error){
+                this.AjaxError(error);
+            });
         }
     }
 });
