@@ -15,6 +15,7 @@
         <p class="alert-warning" v-text="Alert.Warning.password"></p>
       </div>
       <button class="btn btn-primary" @click="submit">ログイン</button>
+      <p class="alert-danger" v-text="Alert.Warning.failure"></p>
     </div>
   </div>
 </div>

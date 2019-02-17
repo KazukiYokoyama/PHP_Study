@@ -18,8 +18,11 @@ class Login extends Model{
 
         $Form = new LoginForm();
 
+        // ログイン認証要求
         if($action_request === 'authentication'){
-            $Action = new LoginAuthentication($Form);
+            $LoginAuthentication = new LoginAuthentication($Form);
+            $LoginAuthentication->Authentication();
+            exit;
         }
     }
 }
@@ -32,8 +35,12 @@ class LoginForm{
     private $password;  // パスワード
 
     function __construct(){
-        $this->email = $_POST['email'];
-        $this->password = $_POST['password'];
+        if(isset($_POST['email'])){
+            $this->email = $_POST['email'];
+        }
+        if(isset($_POST['password'])){
+            $this->password = $_POST['password'];
+        }
     }
 
     public function getEmail(){
@@ -49,34 +56,66 @@ class LoginForm{
  * ログインの為の認証をおこなう
  */
 class LoginAuthentication{
-    private $form;
+    private $email;         // メールアドレス
+    private $password;      // パスワード
+    private $result = [];   // API実行結果
 
     function __construct(LoginForm $form){
-        $this->form = $form;
-
-        $this->InputCheck();
-
+        $this->email = $form->getEmail();
+        $this->password = $form->getPassword();
     }
 
     /**
      * 入力チェック
      */
     private function InputCheck(){
-        $emal = $this->form->getEmail();
-        $password = $this->form->getPassword();
+        $warning = [];
 
-        $error_msg = [];
-        if(empty($emal)){
-            $error_msg['email'] = 'メールアドレス入力なし';
+        //メールアドレスをチェック
+        if(empty($this->email)){
+            $warning['email'] = 'メールアドレス入力がありません';
+        }elseif(!filter_var($this->email, FILTER_VALIDATE_EMAIL)){
+            $warning['email'] = 'メールアドレスの形式が正しくありません';
         }
 
-        if(empty($password)){
-            $error_msg['password'] = 'パスワード入力なし';
+        // パスワードをチェック
+        if(empty($this->password)){
+            $warning['password'] = 'パスワード入力がありません';
+        }elseif(!preg_match("/^[a-zA-Z0-9]+$/", $this->password)){
+            $warning['password'] = 'パスワードの形式が正しくありません';
         }
-        /**
-         * hashをJsonに変更
-         */
-        echo json_encode(['Alert' => ['Warning' => $error_msg]]);
+
+        $this->result['Alert']['Warning'] = $warning;
+    }
+
+    /**
+     * ログインフォームから送信されたパラメータによってログイン認証判定を行う
+     */
+    public function Authentication(){
+        // 入力チェック
+        $this->InputCheck();
+
+        // 入力チェックで問題が無ければ認証判定を行う
+        if(!count($this->result['Alert']['Warning'])){
+            // フォームに入力されたメールアドレスに一致するアカウントを取得する
+            $pdo = DB_Connect::getPDO();
+            $stmt = $pdo->prepare('SELECT * FROM Accounts WHERE email = :email');
+            $stmt->execute([':email'=>$this->email]);
+            if($Account = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                if(password_verify($this->password, $Account["password_hash"])){
+                    // パスワードがマッチしている場合
+                    // セッションにアカウントIDを設定する
+                    session_regenerate_id(true);
+                    $_SESSION["account_id"] = $Account['account_id'];
+                    $this->result['Success'] = 1;
+                }else{
+                    $this->result['Alert']['Warning']['failure'] = 'ユーザーIDあるいはパスワードに誤りがあります。';
+                }
+            }
+        }
+
+        echo json_encode($this->result);
+        exit;
     }
 }
 

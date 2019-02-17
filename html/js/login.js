@@ -28,9 +28,11 @@ var LoginAthentication = new Vue({
             // ログイン認証APIに送信
             axios.post('/login/authentication', params, axios_post_config)
             .then(function(res){
-                // アラートメッセージの取得
+                if(res.data.Success){
+                    location.href = './';
+                }
+                // アラートメッセージを表示
                 LoginAthentication.Alert = res.data.Alert;
-                console.log(Object.keys(LoginAthentication.Alert.Warning).length);
             })
             .catch(function (error){
                 this.AjaxError(error);

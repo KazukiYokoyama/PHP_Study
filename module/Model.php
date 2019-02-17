@@ -1,5 +1,7 @@
 <?php
 
+include ('../module/DBConnect.php');
+
 class Model{
     protected $url = [];        // リクエストされたURL
     protected $page_data = [];  // ページで使用する情報

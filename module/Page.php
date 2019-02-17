@@ -30,7 +30,8 @@ Class Page{
     // Modelから渡されたデータの取得
     private function getData(string $property) :string{
         if(isset($this->data[$property])){
-            return (string) $this->data[$property];
+            
+            return htmlentities($this->data[$property]);
         }
         return '';
     }
