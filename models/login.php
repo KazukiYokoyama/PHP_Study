@@ -9,58 +9,80 @@ session_set_cookie_params(60 * 60);
 //セッションスタート
 session_start();
 
+/**
+ * ログイン画面出力に必要なパラメータの設定する
+ * また、ログインの要求があった場合に処理を実行する判断を行う
+ */
 class Login extends Model{
-    public function Login(){
-        //ログインボタンが押下された場合
-        if (isset($_POST["login"])){
-            $login_check = new LoginCheck();
-            //エラーメッセージが返ってこなければログインの判定を行う
-            if(!$login_check->GetErrorMessage()){
-                $login_check->LoginDecision();
-            }
-        }
-    } 
 
     protected $page_data = [
         'page' => 'login',
         'layout' => 'public_default',
-        'title' => 'ログイン画面'
+        'title' => 'ログイン画面',
+        'errorMessage' => ''
     ];
+
+    public function Action(){
+
+        // ログインボタンが押下された場合、ログイン処理を行う
+        if (isset($_POST["login"])){
+            // 入力チェック
+            $login_check = new LoginCheck();
+            // エラーメッセージが返ってこなければログインの判定を行う
+            $error_msg = $login_check->GetErrorMessage();
+            if(count($error_msg) == 0){
+                $login_check->LoginDecision();
+            }else{
+                echo 'test';
+                $this->page_data['errorMessage'] = $this->CreateErrorMsg($error_msg);
+            }
+
+        }
+    } 
+
+    private function CreateErrorMsg(array $error_msg){
+        $ems = '';
+        foreach($error_msg as $em){
+            $ems .= '<li>'.$em.'</li>';
+        }
+        return '<ul>'.$ems.'</ul>';
+    }
+
 }
 
 /**
  * ログインの判定を行う
  */
 class LoginCheck{
-    private $email;
-    private $password;
-    private $errorMessage = [];
+    private $email;                 // メールアドレス
+    private $password;              // パスワード
+    private $errorMessage = [];     // エラーメッセージ
 
-    //初期処理
-    function __constract(){
+    function __construct(){
+        // 画面から送信された内容を取得
         $this->email = $_POST['email'];
         $this->password = $_POST['password'];
         //入力チェック
-        InputCheck();
+        $this->InputCheck();
     }
     
     //入力チェック処理
-    public function InputCheck(){
+    private function InputCheck(){
         //入力の有無をチェック
         if(empty($this->email)){
-            $errorMessage = 'メールアドレスを入力してください。';
+            array_push($this->errorMessage, 'メールアドレスを入力してください');
         }
         if(empty($this->password)){
-            $errorMessage = 'パスワードを入力してください';
+            array_push($this->errorMessage, 'パスワードを入力してください');
         }
     
         //メールの形式のチェック
         if(!filter_var($this->email, FILTER_VALIDATE_EMAIL)){
-            $errorMessage = 'メールアドレスの形式が正しくありません。';
+            array_push($this->errorMessage, 'メールアドレスの形式が正しくありません');
         }
         //パスワードの形式チェック
         if(!preg_match("/^[a-zA-Z0-9]+$/", $this->password)){
-            $errorMessage = 'パスワードの形式が正しくありません。';
+            array_push($this->errorMessage, 'パスワードの形式が正しくありません');
         }
     }
 
@@ -69,7 +91,8 @@ class LoginCheck{
         try{
             //データベース接続
            $DB = new DB_Connect();
-           $stmt = $DB->prepare('SELECT * FROM Accounts WHERE email = :email');
+           $pdo = $DB->getPDO();
+           $stmt = $pdo->prepare('SELECT * FROM Accounts WHERE email = :email');
            $stmt->execute([':email'=>$this->email]);
 
            if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
@@ -86,16 +109,16 @@ class LoginCheck{
                    header("Location: /models/home.php");
                    exit();
                }else{
-                   $errorMessage = 'ユーザーIDあるいはパスワードに誤りがあります。';
+                    array_push($this->errorMessage, 'ユーザーIDあるいはパスワードに誤りがあります');
                }
            }
        }catch(PDOException $e){
-           $errorMessage = 'データベースエラー';
+            array_push($this->errorMessage, 'データベースエラー:'.$e->getMessage());
        }
     }
     //エラーメッセージの取得
     public function GetErrorMessage(){
-        return $this->$errorMessage;
+        return $this->errorMessage;
     }
 }
 
