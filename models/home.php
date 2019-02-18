@@ -11,7 +11,10 @@ class Home extends Model{
     ];
 
     public function Action(){
-        $this->page_data['msg'] = array_shift($this->url);
+        if($_SESSION['account_id']){
+            $this->page_data['msg'] = 'ログイン中だよ！';
+        }
+        //$this->page_data['msg'] = array_shift($this->url);
     }
 }
 
