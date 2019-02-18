@@ -25,14 +25,13 @@ class Login extends Model{
     ];
 
     public function Action(){
-
         // ログインボタンが押下された場合、ログイン処理を行う
         if (isset($_POST["login"])){
             // 入力チェック
             $login_check = new LoginCheck();
             // エラーメッセージが返ってこなければログインの判定を行う
             list($email_errorMessage, $password_errorMessage, $errorMessage) = $login_check->GetErrorMessage();
-            if(!empty($email_errorMessage) && !empty($password_errorMessage) && !empty($errorMessage)){
+            if(!isset($email_errorMessage, $password_errorMessage)){
                 $login_check->LoginDecision();
             }else{
                 $this->page_data['email_errorMessage'] = $email_errorMessage;
@@ -90,7 +89,7 @@ class LoginCheck{
            $pdo = $DB->getPDO();
            $stmt = $pdo->prepare('SELECT * FROM Accounts WHERE email = :email');
            $stmt->execute([':email'=>$this->email]);
-
+           
            if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                //パスワードのチェック
                if(password_verify($this->password, $row["password_hash"])){
@@ -102,7 +101,7 @@ class LoginCheck{
 
 
                    //ホーム画面へ遷移
-                   header("Location: /models/home.php");
+                   header("Location: /home");
                    exit();
                }else{
                     array_push($this->errorMessage, '<p>ユーザーIDあるいはパスワードに誤りがあります</p>');
