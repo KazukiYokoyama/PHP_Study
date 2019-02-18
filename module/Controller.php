@@ -1,5 +1,6 @@
 <?php
 
+include_once ('../module/Common.php');
 include_once ('../module/Page.php');
 
 //###########################################
