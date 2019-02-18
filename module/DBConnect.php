@@ -10,7 +10,7 @@ class DB_Connect{
         try{
             //データベースに接続
             $this->pdo = new PDO(
-                'mysql:dbname=Blogs;host=localhost;charset=utf8mb4',
+                'mysql:dbname=Blog;host=localhost;charset=utf8mb4',
                 'phpstudy',
                 'phpstudy',
                 [
