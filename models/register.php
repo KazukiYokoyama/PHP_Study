@@ -16,17 +16,15 @@ class Register extends Model{
      */
     public function Action(){
         $action_request = array_shift($this->url);
-        $form = new RegisterForm();
 
         // アカウント登録要求
         if($action_request === 'sygnup'){
-            $AccountRegister = new AccountRegister($form);
+            $AccountRegister = new AccountRegister();
             $result = $AccountRegister->getResult();
             // APIレスポンス返却
             echo json_encode($result);
             exit;
         }
-
     }
 }
 
@@ -110,19 +108,18 @@ class RegisterForm{
  * アカウントの登録を行う
  */
 class AccountRegister{
-    private $account_name;
-    private $email;         // メールアドレス
-    private $password;      // パスワード
-    private $result = [];   // API実行結果
+    private $form;  // アカウント登録フォーム
+    // API実行結果
+    private $result = [
+        'Success' => ''
+    ];
 
-    function __construct(RegisterForm $form){
+    function __construct(){
         // フォームの入力内容を取得
-        $this->account_name = $form->getAccountName();
-        $this->email = $form->getEmail();
-        $this->password = $form->getPassword();
+        $this->form = new RegisterForm();
 
         // 入力チェック違反の内容を取得
-        $this->result['Alert']['Warning'] = $form->getValidationWarning();
+        $this->result['Alert']['Warning'] = $this->form->getValidationWarning();
 
         // 入力違反が無ければ認証判定を行う
         if(!count($this->result['Alert']['Warning'])){
@@ -140,9 +137,9 @@ class AccountRegister{
             $stmt = $pdo->prepare('INSERT INTO Accounts (account_name, email, password_hash) VALUES (:account_name, :email, :password_hash)');
             $stmt->execute(
                 [
-                    ':account_name'=>$this->account_name,
-                    ':email'=>$this->email,
-                    ':password_hash'=>password_hash($this->password, PASSWORD_DEFAULT)
+                    ':account_name'=>$this->form->getAccountName(),
+                    ':email'=>$this->form->getEmail(),
+                    ':password_hash'=>password_hash($this->form->getPassword(), PASSWORD_DEFAULT)
                 ]
             );
             $this->result['Success'] = 1;

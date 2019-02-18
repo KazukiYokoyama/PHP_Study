@@ -16,11 +16,10 @@ class Login extends Model{
      */
     public function Action(){
         $action_request = array_shift($this->url);
-        $Form = new LoginForm();
 
         // ログイン認証要求
         if($action_request === 'authentication'){
-            $LoginAuthentication = new LoginAuthentication($Form);
+            $LoginAuthentication = new LoginAuthentication();
             $result = $LoginAuthentication->getResult();
             // APIレスポンス返却
             echo json_encode($result);
@@ -88,22 +87,23 @@ class LoginForm{
  * ログインの為の認証をおこなう
  */
 class LoginAuthentication{
-    private $email;         // メールアドレス
-    private $password;      // パスワード
-    private $result = [];   // API実行結果
+    private $form;  // ログインフォーム
+    // API実行結果
+    private $result = [
+        'Success' => ''
+    ];
 
     /**
      * フォームの入力チェックを行い、
      * 入力違反が無ければ認証判定を行う
      * @param LoginForm $form
      */
-    function __construct(LoginForm $form){
+    function __construct(){
         // フォームの入力内容を取得
-        $this->email = $form->getEmail();
-        $this->password = $form->getPassword();
+        $this->form = new LoginForm();
 
         // 入力チェック違反の内容を取得
-        $this->result['Alert']['Warning'] = $form->getValidationWarning();
+        $this->result['Alert']['Warning'] = $this->form->getValidationWarning();
 
         // 入力違反が無ければ認証判定を行う
         if(!count($this->result['Alert']['Warning'])){
@@ -120,9 +120,9 @@ class LoginAuthentication{
         // フォームに入力されたメールアドレスに一致するアカウントを取得する
         $pdo = DB_Connect::getPDO();
         $stmt = $pdo->prepare('SELECT * FROM Accounts WHERE email = :email');
-        $stmt->execute([':email'=>$this->email]);
+        $stmt->execute([':email'=>$this->form->getEmail()]);
         if($Account = $stmt->fetch(PDO::FETCH_ASSOC)) {
-            if(password_verify($this->password, $Account["password_hash"])){
+            if(password_verify($this->form->getPassword(), $Account["password_hash"])){
                 // パスワードがマッチしている場合
                 // セッションにアカウントIDを設定する
                 session_regenerate_id(true);
