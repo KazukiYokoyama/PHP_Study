@@ -19,6 +19,8 @@ class Login extends Model{
         'page' => 'login',
         'layout' => 'public_default',
         'title' => 'ログイン画面',
+        'email_errorMessage' => '',
+        'password_errorMessage' => '',
         'errorMessage' => ''
     ];
 
@@ -29,24 +31,16 @@ class Login extends Model{
             // 入力チェック
             $login_check = new LoginCheck();
             // エラーメッセージが返ってこなければログインの判定を行う
-            $error_msg = $login_check->GetErrorMessage();
-            if(count($error_msg) == 0){
+            list($email_errorMessage, $password_errorMessage, $errorMessage) = $login_check->GetErrorMessage();
+            if(!empty($email_errorMessage) && !empty($password_errorMessage) && !empty($errorMessage)){
                 $login_check->LoginDecision();
             }else{
-                echo 'test';
-                $this->page_data['errorMessage'] = $this->CreateErrorMsg($error_msg);
+                $this->page_data['email_errorMessage'] = $email_errorMessage;
+                $this->page_data['password_errorMessage'] = $password_errorMessage;
+                $this->page_data['errorMessage'] = $errorMessage;
             }
-
         }
     } 
-
-    private function CreateErrorMsg(array $error_msg){
-        $ems = '';
-        foreach($error_msg as $em){
-            $ems .= '<li>'.$em.'</li>';
-        }
-        return '<ul>'.$ems.'</ul>';
-    }
 
 }
 
@@ -54,9 +48,11 @@ class Login extends Model{
  * ログインの判定を行う
  */
 class LoginCheck{
-    private $email;                 // メールアドレス
-    private $password;              // パスワード
-    private $errorMessage = [];     // エラーメッセージ
+    private $email;                     // メールアドレス
+    private $password;                  // パスワード
+    private $email_errorMessage;        // メールアドレスのエラーメッセージ
+    private $password_errorMessage;     // パスワードのエラーメッセージ
+    private $errorMessage;              //メールアドレス・パスワード以外のエラーメッセージ
 
     function __construct(){
         // 画面から送信された内容を取得
@@ -70,19 +66,19 @@ class LoginCheck{
     private function InputCheck(){
         //入力の有無をチェック
         if(empty($this->email)){
-            array_push($this->errorMessage, 'メールアドレスを入力してください');
+            $this->email_errorMessage = '<p>メールアドレスを入力してください</p>';
         }
         if(empty($this->password)){
-            array_push($this->errorMessage, 'パスワードを入力してください');
+            $this->password_errorMessage = '<p>パスワードを入力してください</p>';
         }
     
         //メールの形式のチェック
-        if(!filter_var($this->email, FILTER_VALIDATE_EMAIL)){
-            array_push($this->errorMessage, 'メールアドレスの形式が正しくありません');
+        if(!empty($this->email) && !filter_var($this->email, FILTER_VALIDATE_EMAIL)){
+            $this->email_errorMessage = '<p>メールアドレスの形式が正しくありません</p>';
         }
         //パスワードの形式チェック
-        if(!preg_match("/^[a-zA-Z0-9]+$/", $this->password)){
-            array_push($this->errorMessage, 'パスワードの形式が正しくありません');
+        if(!empty($this->password) && !preg_match("/^[a-zA-Z0-9]+$/", $this->password)){
+            $this->password_errorMessage = '<p>パスワードの形式が正しくありません</p>';
         }
     }
 
@@ -109,16 +105,16 @@ class LoginCheck{
                    header("Location: /models/home.php");
                    exit();
                }else{
-                    array_push($this->errorMessage, 'ユーザーIDあるいはパスワードに誤りがあります');
+                    array_push($this->errorMessage, '<p>ユーザーIDあるいはパスワードに誤りがあります</p>');
                }
            }
        }catch(PDOException $e){
-            array_push($this->errorMessage, 'データベースエラー:'.$e->getMessage());
+            array_push($this->errorMessage, '<p>データベースエラー:'.$e->getMessage().'</p>');
        }
     }
     //エラーメッセージの取得
     public function GetErrorMessage(){
-        return $this->errorMessage;
+        return array($this->email_errorMessage, $this->password_errorMessage, $this->errorMessage);
     }
 }
 
