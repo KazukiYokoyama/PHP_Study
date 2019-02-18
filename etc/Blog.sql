@@ -28,8 +28,8 @@ FLUSH PRIVILEGES;
 DROP TABLE IF EXISTS `Accounts`;
 CREATE TABLE IF NOT EXISTS `Accounts` (
   `account_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'アカウントID',
-  `account_name` varchar(20) DEFAULT NULL COMMENT 'アカウント名',
-  `email` varchar(100) DEFAULT NULL COMMENT 'メールアドレス',
+  `account_name` varchar(20) UNIQUE DEFAULT NULL COMMENT 'アカウント名',
+  `email` varchar(100) UNIQUE DEFAULT NULL COMMENT 'メールアドレス',
   `password_hash` varchar(255) DEFAULT NULL COMMENT 'パスワードハッシュ',
   PRIMARY KEY (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='サービス利用者のアカウントを保持する';
