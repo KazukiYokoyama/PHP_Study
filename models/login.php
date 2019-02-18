@@ -12,6 +12,7 @@ class Login extends Model{
 
     /**
      * ログイン画面の動作
+     * @return void
      */
     public function Action(){
         $action_request = array_shift($this->url);
@@ -46,7 +47,10 @@ class LoginForm{
         $this->validationPassword();
     }
 
-    // 入力チェック メールアドレス
+    /**
+     * メールアドレス　入力チェック
+     * @return void
+     */
     private function validationEmail(){
         if(empty($this->email)){
             $this->vaildation_warning['email'] = 'メールアドレスの入力がありません';
@@ -55,7 +59,10 @@ class LoginForm{
         }
     }
 
-    // 入力チェック パスワード
+    /**
+     * パスワード　入力チェック
+     * @return void
+     */
     private function validationPassword(){
         if(empty($this->password)){
             $this->vaildation_warning['password'] = 'パスワードの入力がありません';
@@ -85,6 +92,11 @@ class LoginAuthentication{
     private $password;      // パスワード
     private $result = [];   // API実行結果
 
+    /**
+     * フォームの入力チェックを行い、
+     * 入力違反が無ければ認証判定を行う
+     * @param LoginForm $form
+     */
     function __construct(LoginForm $form){
         // フォームの入力内容を取得
         $this->email = $form->getEmail();
@@ -93,7 +105,7 @@ class LoginAuthentication{
         // 入力チェック違反の内容を取得
         $this->result['Alert']['Warning'] = $form->getValidationWarning();
 
-        // 入力チェックで問題が無ければ認証判定を行う
+        // 入力違反が無ければ認証判定を行う
         if(!count($this->result['Alert']['Warning'])){
             $this->Authentication();
         }
@@ -102,6 +114,7 @@ class LoginAuthentication{
     /**
      * ログインフォームから送信されたパラメータによってログイン認証判定を行う
      * 認証成功：$this->result['Success'] === 1;
+     * @return void
      */
     private function Authentication(){
         // フォームに入力されたメールアドレスに一致するアカウントを取得する
@@ -124,6 +137,7 @@ class LoginAuthentication{
 
     /**
      * API実行結果を返す
+     * @return array
      */
     public function getResult() :array{
         return $this->result;
