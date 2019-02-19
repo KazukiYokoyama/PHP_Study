@@ -4,11 +4,6 @@
 //###########################################
 include ('../module/DBConnect.php');
 
-// セッションの有効期限を1時間に設定
-session_set_cookie_params(60 * 60);
-//セッションスタート
-session_start();
-
 /**
  * ログイン画面出力に必要なパラメータの設定する
  * また、ログインの要求があった場合に処理を実行する判断を行う
@@ -29,15 +24,17 @@ class Login extends Model{
         if (isset($_POST["login"])){
             // 入力チェック
             $login_check = new LoginCheck();
-            // エラーメッセージが返ってこなければログインの判定を行う
-            list($email_errorMessage, $password_errorMessage, $errorMessage) = $login_check->GetErrorMessage();
-            if(!isset($email_errorMessage, $password_errorMessage)){
-                $login_check->LoginDecision();
-            }else{
-                $this->page_data['email_errorMessage'] = $email_errorMessage;
-                $this->page_data['password_errorMessage'] = $password_errorMessage;
-                $this->page_data['errorMessage'] = $errorMessage;
+            // エラーメッセージがあればそのメッセージを渡す
+            $email_message = $login_check->GetEmailErrorMessage();
+            $password_message = $login_check->GetPasswordErrorMessage();
+            if($email_message || $password_message){
+                $this->page_data['email_errorMessage'] = $email_message;
+                $this->page_data['password_errorMessage'] = $password_message;
             }
+            // ログイン判定
+            $login = $login_check->LoginDecision();
+            //ログインに失敗した場合エラーメッセージを渡す
+            if(!$login){ $this->page_data['errorMessage'] = $login_check->GetErrorMessage(); }
         }
     } 
 
@@ -56,7 +53,13 @@ class LoginCheck{
     function __construct(){
         // 画面から送信された内容を取得
         $this->email = $_POST['email'];
+        if(!isset($this->email)){
+            $this->email = '';
+        }
         $this->password = $_POST['password'];
+        if(!isset($this->password)){
+            $this->password = '';
+        }
         //入力チェック
         $this->InputCheck();
     }
@@ -66,17 +69,12 @@ class LoginCheck{
         //入力の有無をチェック
         if(empty($this->email)){
             $this->email_errorMessage = '<p>メールアドレスを入力してください</p>';
+        }elseif(!filter_var($this->email, FILTER_VALIDATE_EMAIL)){
+            $this->email_errorMessage = '<p>メールアドレスの形式が正しくありません</p>';
         }
         if(empty($this->password)){
             $this->password_errorMessage = '<p>パスワードを入力してください</p>';
-        }
-    
-        //メールの形式のチェック
-        if(!empty($this->email) && !filter_var($this->email, FILTER_VALIDATE_EMAIL)){
-            $this->email_errorMessage = '<p>メールアドレスの形式が正しくありません</p>';
-        }
-        //パスワードの形式チェック
-        if(!empty($this->password) && !preg_match("/^[a-zA-Z0-9]+$/", $this->password)){
+        }elseif(!preg_match("/^[a-zA-Z0-9]+$/", $this->password)){
             $this->password_errorMessage = '<p>パスワードの形式が正しくありません</p>';
         }
     }
@@ -104,16 +102,25 @@ class LoginCheck{
                    header("Location: /home");
                    exit();
                }else{
-                    array_push($this->errorMessage, '<p>ユーザーIDあるいはパスワードに誤りがあります</p>');
+                    $this->errorMessage = '<p>ログインエラー：ユーザーIDあるいはパスワードに誤りがあります</p>';
                }
            }
        }catch(PDOException $e){
-            array_push($this->errorMessage, '<p>データベースエラー:'.$e->getMessage().'</p>');
+            $this->errorMessage = '<p>データベースエラー:'.$e->getMessage().'</p>';
        }
     }
+
     //エラーメッセージの取得
+    public function GetEmailErrorMessage(){
+        return $this->email_errorMessage;
+    }
+
+    public function GetPasswordErrorMessage(){
+        return $this->password_errorMessage;
+    }
+
     public function GetErrorMessage(){
-        return array($this->email_errorMessage, $this->password_errorMessage, $this->errorMessage);
+        return $this->errorMessage;
     }
 }
 
