@@ -19,6 +19,10 @@ Class Controller{
         $this->url = $url;
         $page = array_shift($this->url);
         if($page !== ''){ $this->page = $page; }
+        // セッションの有効期限を1時間に設定
+        session_set_cookie_params(60 * 60);
+        //セッションスタート
+        session_start();
     }
 
     /**
