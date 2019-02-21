@@ -42,6 +42,14 @@ Class Controller{
             $page_data = $model->getData();
         }
 
+        if ($this->page === '404'){
+            $page_data = [
+                'page' => '404',
+                'layout' => 'public_default',
+                'title' => '404 not found'
+            ];
+        }
+
         // 編集したページを表示
         $Page = new Page();
         $Page->setData($page_data);

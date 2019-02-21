@@ -18,7 +18,8 @@ Class Page{
             require('../views/layouts/'.$this->getData('layout').'.layout.php');
         }else{
             // ページが無い場合、404（Not Found）を表示する
-            echo ' (´・ω・｀) 無いよ';
+            header("HTTP/1.0 404 Not Found");
+            header("Location: /404");
         }
     }
 
