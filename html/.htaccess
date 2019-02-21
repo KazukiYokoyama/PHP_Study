@@ -7,7 +7,8 @@
     RewriteCond %{REQUEST_URI} !\.(css|jpe?g|png|js|gif|swf|ico)$
 
     # ルートディレクトリ以下を指定された場合、全てindex.phpにリダイレクトさせる
-    RewriteRule ^(.*) $index.php?url=$1 [QSA,L]
+    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
 
-    # ErrorDocument 404 /404.php
+    RewriteCond %{THE_REQUEST} ^.*/index.php
+    RewriteRule ^(.*)index.php$ / [R=301,L]
 </IfModule>
