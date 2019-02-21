@@ -3,9 +3,9 @@
 // Model　アカウント登録
 //###########################################
 
-class Signup extends Model{
+class Register extends Model{
     protected $page_data = [
-        'page' => 'signup',
+        'page' => 'register',
         'layout' => 'public_default',
         'title' => 'アカウント登録'
     ];
