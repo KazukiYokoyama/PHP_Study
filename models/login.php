@@ -10,15 +10,6 @@ include ('../module/DBConnect.php');
  */
 class Login extends Model{
 
-    protected $page_data = [
-        'page' => 'login',
-        'layout' => 'public_default',
-        'title' => 'ログイン画面',
-        'email_errorMessage' => '',
-        'password_errorMessage' => '',
-        'errorMessage' => ''
-    ];
-
     public function Action(){
         // ログインボタンが押下された場合、ログイン処理を行う
         if (isset($_POST["login"])){
@@ -36,6 +27,7 @@ class Login extends Model{
             //ログインに失敗した場合エラーメッセージを渡す
             if(!$login){ $this->page_data['errorMessage'] = $login_check->GetErrorMessage(); }
         }
+        $this->page = new Page('ログイン画面', 'login', $this->page_data);
     } 
 
 }

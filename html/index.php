@@ -1,12 +1,10 @@
 <?php
 
-include_once ('../module/Controller.php');
 include_once ('../module/Model.php');
+include_once ('../module/View.php');
+include_once ('../module/Controller.php');
 
-// URL取得
-$url = explode('/', filter_input(INPUT_GET, 'url'));
-
-$Controller = new Controller($url);
+$Controller = new Controller();
 $Controller->main();
 
 exit;
