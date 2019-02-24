@@ -5,17 +5,17 @@
     </div>
     <form method="POST">
       <div class="form-group">
-          <label for="username">User Name</label>
-          <input type="text" class="form-control" id="username" placeholder="Enter UserName">
+          <label for="exampleInputUserName">User Name</label>
+          <input type="text" name="username" class="form-control" id="exampleInputUserName" placeholder="Enter UserName">
       </div>
       <div class="form-group">
-        <label for="email">Email address</label>
-        <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email">
+        <label for="exampleInputEmail1">Email address</label>
+        <input type="email"  name="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
         <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
       </div>
       <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" class="form-control" id="password" placeholder="Password">
+        <label for="exampleInputPassword1">Password</label>
+        <input type="password"  name="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
       </div>
       <div class="form-group form-check">
         <input type="checkbox" class="form-check-input" id="exampleCheck1">
