@@ -26,8 +26,9 @@ class Register extends Model{
             // var_dump($err_msg);
 
             // echo "<script>alert('エラー');</script>";
-            echo "<script>alert('$err_msg');</script>";
-
+            if(isset($err_msg)){
+                echo "<script>alert('$err_msg');</script>";
+            }
         }
     }
 
@@ -41,7 +42,6 @@ class Account {
 
     function __construct(){
         // 画面から送信された内容を取得
-        var_dump($_POST['username']);
         $this->username = $_POST['username'];
         if(!isset($this->username)){
             $this->username = '';
