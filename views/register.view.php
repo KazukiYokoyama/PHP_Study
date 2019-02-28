@@ -6,7 +6,7 @@
     <form method="POST">
       <div class="form-group">
           <label for="exampleInputUserName">User Name</label>
-          <input type="text" name="username" class="form-control" id="exampleInputUserName" placeholder="Enter UserName">
+          <input type="text" name="account_name" class="form-control" id="exampleInputUserName" placeholder="Enter account_name">
       </div>
       <div class="form-group">
         <label for="exampleInputEmail1">Email address</label>
