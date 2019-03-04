@@ -19,21 +19,18 @@ class Register extends Model{
     public function Action(){
         // この中で登録処理を呼び出す
         if (isset($_POST["insert"])){
-            Err_Alert('テスト開始');
             // 入力チェック
             $input_check = new Account();
-            
-            // エラーメッセージがあればそのメッセージを渡す
-            // エラーメッセージは該当項目の下部に出力する形式に修正すること。
-            // パスワードのハッシュ化について、キーは共通化するために確認すること。
-            $err_msg = $input_check->Get_Errormessage();
-
-            if($err_msg){
-                Err_Alert($err_msg);
+            $username_message = $input_check->Get_account_name_errorMessage();
+            $email_message = $input_check->Get_email_errorMessage();
+            $password_message = $input_check->Get_password_errorMessage();
+            if($username_message || $email_message || $password_message){
+                $this->page_data['username_errorMessage'] = $username_message;
+                $this->page_data['email_errorMessage'] = $email_message;
+                $this->page_data['password_errorMessage'] = $password_message;
             }else{
                 $flg = $input_check->Insert_Accounts();
             }
-            Err_Alert('テスト終了');
         }
     }
 
@@ -43,7 +40,10 @@ class Account {
     private $account_name;              // ユーザ名
     private $email;                     // メールアドレス
     private $password;                  // パスワード
-    private $errorMessage;              // エラーメッセージ
+    private $errorflg;                  // エラーフラグ
+    private $account_name_errorMessage; // ユーザ名エラーメッセージ
+    private $email_errorMessage;        // メールアドレスエラーメッセージ
+    private $password_errorMessage;     // パスワードエラーメッセージ
 
     function __construct(){
         // 画面から送信された内容を取得
@@ -83,9 +83,9 @@ class Account {
             $check = $stmt->execute();
 
             if($check){
-                Err_Alert('ＳＱＬ実行成功');
+                echo "<script>alert('アカウントの登録に成功しました！');</script>";;
             }else{
-                Err_Alert('ＳＱＬ実行失敗');
+                echo "<script>alert('アカウントの登録に失敗しました。');</script>";
             }
 
         }catch(PDOException $e){
@@ -94,35 +94,38 @@ class Account {
     }
 
     protected function Input_check() {
-        $this->errorMessage="";
         #ユーザ名：未入力チェック
         if(empty($this->account_name)){
-            $this->errorMessage .= 'アカウント名を入力してください。\n';
+            $this->account_name_errorMessage .= '<p>アカウント名を入力してください。</p>';
         }elseif(!preg_match("/^[a-zA-Z0-9]+$/", $this->account_name)){
-            $this->errorMessage .= 'アカウント名は英数字のみで作成してください。\n';
+            $this->account_name_errorMessage .= '<p>アカウント名は英数字のみで作成してください。</p>';
         }elseif(strlen($this->account_name)> 20){
-            $this->errorMessage .= 'アカウント名は２０文字以下で作成してください。\n';
+            $this->account_name_errorMessage .= '<p>アカウント名は２０文字以下で作成してください。</p>';
         }
         #Ｅメール：未入力チェック
         if(empty($this->email)){
-            $this->errorMessage .= 'メールアドレスを入力してください。\n';
+            $this->email_errorMessage .= '<p>メールアドレスを入力してください。</p>';
         }elseif(!filter_var($this->email, FILTER_VALIDATE_EMAIL)){
-            $this->errorMessage .= 'メールアドレスの形式が正しくありません。\n';
+            $this->email_errorMessage .= '<p>メールアドレスの形式が正しくありません。</p>';
         }
         #パスワード：未入力チェック
         if(empty($this->password)){
-            $this->errorMessage .= 'パスワードを入力してください。\n';
+            $this->password_errorMessage .= '<p>パスワードを入力してください。</p>';
         }elseif(!preg_match("/^[a-zA-Z0-9]+$/", $this->password)){
-            $this->errorMessage .= 'パスワードは半角英数字のみで作成してください。\n';
+            $this->password_errorMessage .= '<p>パスワードは半角英数字のみで作成してください。</p>';
         }elseif(strlen($this->password)> 20){
-            $this->errorMessage .= 'パスワードは２０文字以下で作成してください。\n';
+            $this->password_errorMessage .= '<p>パスワードは２０文字以下で作成してください。</p>';
         }
     }
-
-    function Get_Errormessage(){
-        return $this->errorMessage;
+    function Get_account_name_errorMessage(){
+        return $this->account_name_errorMessage;
     }
-
+    function Get_email_errorMessage(){
+        return $this->email_errorMessage;
+    }
+    function Get_password_errorMessage(){
+        return $this->password_errorMessage;
+    }
 }
 
 ?>
