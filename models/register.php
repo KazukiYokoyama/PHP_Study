@@ -4,10 +4,6 @@
 //###########################################
 include ('../module/DBConnect.php');
 
-function Err_Alert($str){
-    echo "<script>alert('$str');</script>";
-}
-
 class Register extends Model{
     protected $page_data = [
         'page' => 'register',
@@ -67,27 +63,20 @@ class Account {
             //データベース接続
             $DB = new DB_Connect();
             $pdo = $DB->getPDO();
-            
             // SQL準備
             $stmt = $pdo->prepare('INSERT INTO Accounts (account_name, email, password_hash)VALUES(:account_name, :email, :password_hash)');
-
             // プレースホルダの値をセット
-            // ・ＳＱＬインジェクション対策
-            // ・パスワードのハッシュ化に対応
             $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
             $stmt->bindParam(':account_name',$this->account_name, PDO::PARAM_STR);
             $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
             $stmt->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
-
             // ＳＱＬ実行部分
             $check = $stmt->execute();
-
             if($check){
                 echo "<script>alert('アカウントの登録に成功しました！');</script>";;
             }else{
                 echo "<script>alert('アカウントの登録に失敗しました。');</script>";
             }
-
         }catch(PDOException $e){
             $this->errorMessage = '<p>データベースエラー:'.$e->getMessage().'</p>';
         }
