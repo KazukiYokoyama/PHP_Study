@@ -26,13 +26,20 @@ FLUSH PRIVILEGES;
 
 --  テーブル Blog.Accounts の構造をダンプしています
 DROP TABLE IF EXISTS `Accounts`;
-CREATE TABLE IF NOT EXISTS `Accounts` (
-  `account_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'アカウントID',
-  `account_name` varchar(20) DEFAULT NULL COMMENT 'アカウント名',
-  `email` varchar(100) DEFAULT NULL COMMENT 'メールアドレス',
-  `password_hash` varchar(255) DEFAULT NULL COMMENT 'パスワードハッシュ',
-  PRIMARY KEY (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='サービス利用者のアカウントを保持する';
+CREATE TABLE `Accounts` (
+	`account_id` BIGINT(20) UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'アカウントID',
+	`account_name` VARCHAR(20) NULL DEFAULT NULL COMMENT 'アカウント名',
+	`email` VARCHAR(100) NULL DEFAULT NULL COMMENT 'メールアドレス',
+	`password_hash` VARCHAR(255) NULL DEFAULT NULL COMMENT 'パスワードハッシュ',
+	PRIMARY KEY (`account_id`),
+	UNIQUE INDEX `account_name` (`account_name`),
+	UNIQUE INDEX `email` (`email`)
+)
+COMMENT='サービス利用者のアカウントを保持する'
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=6
+;
 
 -- エクスポートするデータが選択されていません
 --  テーブル Blog.Articles の構造をダンプしています
