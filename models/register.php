@@ -25,7 +25,11 @@ class Register extends Model{
                 $this->page_data['email_errorMessage'] = $email_message;
                 $this->page_data['password_errorMessage'] = $password_message;
             }else{
-                $flg = $input_check->Insert_Accounts();
+                $input_check->Insert_Accounts();
+                $errormessage = $input_check->Get_errorMessage();
+                if($errormessage){
+                    echo "<script>alert('$errormessage');</script>";
+                }
             }
         }
     }
@@ -37,6 +41,7 @@ class Account {
     private $email;                     // メールアドレス
     private $password;                  // パスワード
     private $errorflg;                  // エラーフラグ
+    private $errorMessage;              // 汎用エラー
     private $account_name_errorMessage; // ユーザ名エラーメッセージ
     private $email_errorMessage;        // メールアドレスエラーメッセージ
     private $password_errorMessage;     // パスワードエラーメッセージ
@@ -73,12 +78,12 @@ class Account {
             // ＳＱＬ実行部分
             $check = $stmt->execute();
             if($check){
-                echo "<script>alert('アカウントの登録に成功しました！');</script>";;
+                echo "<script>alert('アカウントの登録に成功しました！');</script>";
             }else{
                 echo "<script>alert('アカウントの登録に失敗しました。');</script>";
             }
         }catch(PDOException $e){
-            $this->errorMessage = '<p>データベースエラー:'.$e->getMessage().'</p>';
+            $this->errorMessage .= 'データベース更新エラー\n'.addslashes($e->getMessage()).'。';
         }
     }
 
@@ -105,6 +110,9 @@ class Account {
         }elseif(strlen($this->password)> 20){
             $this->password_errorMessage .= '<p>パスワードは２０文字以下で作成してください。</p>';
         }
+    }
+    function Get_errorMessage(){
+        return $this->errorMessage;
     }
     function Get_account_name_errorMessage(){
         return $this->account_name_errorMessage;
