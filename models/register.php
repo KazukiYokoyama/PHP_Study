@@ -25,10 +25,15 @@ class Register extends Model{
                 $this->page_data['email_errorMessage'] = $email_message;
                 $this->page_data['password_errorMessage'] = $password_message;
             }else{
-                $input_check->Insert_Accounts();
-                $errormessage = $input_check->Get_errorMessage();
-                if($errormessage){
-                    echo "<script>alert('$errormessage');</script>";
+                if ($input_check->Insert_Accounts()){
+                    header("Location: /registered");  
+                }else{
+                    $errormessage = $input_check->Get_errorMessage();
+                    if($errormessage[1] = 1062){
+                        echo "<script>alert('既に登録されているアカウントです！');</script>";
+                    }else{
+                        echo "<script>alert('登録エラー');</script>";
+                    }
                 }
             }
         }
@@ -64,6 +69,7 @@ class Account {
     }
 
     function Insert_Accounts(){
+        $rtnFlg = 0;
         try{
             //データベース接続
             $DB = new DB_Connect();
@@ -71,7 +77,7 @@ class Account {
             // SQL準備
             $stmt = $pdo->prepare('INSERT INTO Accounts (account_name, email, password_hash)VALUES(:account_name, :email, :password_hash)');
             // プレースホルダの値をセット
-            $password_hash = password_hash($this->password, PASSWORD_BCRYPT);
+            $password_hash = password_hash($this->password, PASSWORD_DEFAULT);
             $stmt->bindParam(':account_name',$this->account_name, PDO::PARAM_STR);
             $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
             $stmt->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
@@ -79,12 +85,20 @@ class Account {
             $check = $stmt->execute();
             if($check){
                 echo "<script>alert('アカウントの登録に成功しました！');</script>";
+                $rtnFlg = 1;
             }else{
                 echo "<script>alert('アカウントの登録に失敗しました。');</script>";
+                $rtnFlg = 0;
             }
         }catch(PDOException $e){
-            $this->errorMessage .= 'データベース更新エラー\n'.addslashes($e->getMessage()).'。';
+            $this->errorMessage = array(
+                0=>$e->errorInfo[0],
+                1=>$e->errorInfo[1],
+                2=>$e->errorInfo[2],
+            );
+            $rtnFlg = 0;
         }
+        return $rtnFlg;
     }
 
     protected function Input_check() {
