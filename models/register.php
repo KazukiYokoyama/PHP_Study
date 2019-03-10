@@ -101,7 +101,7 @@ class Account {
         return $rtnFlg;
     }
 
-    protected function Input_check() {
+    private function Input_check() {
         #ユーザ名：未入力チェック
         if(empty($this->account_name)){
             $this->account_name_errorMessage .= '<p>アカウント名を入力してください。</p>';
