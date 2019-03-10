@@ -19,7 +19,7 @@
 				<button type="submit" name="login" class="btn btn-primary d-block mx-auto">ログイン</button>
 			</form>
 			<p class="small text-center mt-4 pt-2">
-				アカウント登録がおすみでない方は、<a href="register.php" class="link-under-line">アカウント登録</a>から登録を行ってください。
+				アカウント登録がおすみでない方は、<a href="register" class="link-under-line">アカウント登録</a>から登録を行ってください。
 			</p>
 		</div>
 	</div>
