@@ -10,6 +10,13 @@ include ('../module/DBConnect.php');
  */
 class Login extends Model{
 
+    protected $page_data = [
+        'email_errorMessage' => '',
+        'password_errorMessage' => '',
+        'errorMessage' => '',
+        'css' => '<link rel="stylesheet" href="/css/login.css">'
+    ];
+
     public function Action(){
         // ログインボタンが押下された場合、ログイン処理を行う
         if (isset($_POST["login"])){
@@ -60,14 +67,14 @@ class LoginCheck{
     private function InputCheck(){
         //入力の有無をチェック
         if(empty($this->email)){
-            $this->email_errorMessage = '<p>メールアドレスを入力してください</p>';
+            $this->email_errorMessage = '<p class="text-error">メールアドレスを入力してください</p>';
         }elseif(!filter_var($this->email, FILTER_VALIDATE_EMAIL)){
-            $this->email_errorMessage = '<p>メールアドレスの形式が正しくありません</p>';
+            $this->email_errorMessage = '<p class="text-error">メールアドレスの形式が正しくありません</p>';
         }
         if(empty($this->password)){
-            $this->password_errorMessage = '<p>パスワードを入力してください</p>';
+            $this->password_errorMessage = '<p class="text-error">パスワードを入力してください</p>';
         }elseif(!preg_match("/^[a-zA-Z0-9]+$/", $this->password)){
-            $this->password_errorMessage = '<p>パスワードの形式が正しくありません</p>';
+            $this->password_errorMessage = '<p class="text-error">パスワードの形式が正しくありません</p>';
         }
     }
 
@@ -94,11 +101,11 @@ class LoginCheck{
                    header("Location: /home");
                    exit();
                }else{
-                    $this->errorMessage = '<p>ログインエラー：ユーザーIDあるいはパスワードに誤りがあります</p>';
+                    $this->errorMessage = '<p class="text-danger">ログインエラー：ユーザーIDあるいはパスワードに誤りがあります</p>';
                }
            }
        }catch(PDOException $e){
-            $this->errorMessage = '<p>データベースエラー:'.$e->getMessage().'</p>';
+            $this->errorMessage = '<p class="text-danger">データベースエラー:'.$e->getMessage().'</p>';
        }
     }
 
