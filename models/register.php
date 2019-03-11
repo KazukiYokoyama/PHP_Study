@@ -15,7 +15,7 @@ class Register extends Model{
     public function Action(){
         // この中で登録処理を呼び出す
         if (isset($_POST["insert"])){
-            // 入力チェック
+            // 入力チェックの結果を取得する
             $input_check = new Account();
             $username_message = $input_check->Get_account_name_errorMessage();
             $email_message = $input_check->Get_email_errorMessage();
