@@ -1,8 +1,7 @@
 DROP TABLE IF EXISTS `Accounts`;
 CREATE TABLE IF NOT EXISTS `Accounts` (
-  `account_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ƒAƒJƒEƒ“ƒgID',
-  `account_name` varchar(20) DEFAULT NULL UNIQUE COMMENT 'ƒAƒJƒEƒ“ƒg–¼',
-  `email` varchar(100) DEFAULT NULL UNIQUE COMMENT 'ƒ[ƒ‹ƒAƒhƒŒƒX',
-  `password_hash` varchar(255) DEFAULT NULL COMMENT 'ƒpƒXƒ[ƒhƒnƒbƒVƒ…',
-  PRIMARY KEY (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='ƒT[ƒrƒX—˜—pŽÒ‚ÌƒAƒJƒEƒ“ƒg‚ð•ÛŽ‚·‚é';
+  `account_id` bigint(20) unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'ã‚¢ã‚«ã‚¦ãƒ³ãƒˆID',
+  `account_name` varchar(20) DEFAULT NULL UNIQUE COMMENT 'ã‚¢ã‚«ã‚¦ãƒ³ãƒˆå',
+  `email` varchar(100) DEFAULT NULL UNIQUE COMMENT 'ãƒ¡ãƒ¼ãƒ«ã‚¢ãƒ‰ãƒ¬ã‚¹',
+  `password_hash` varchar(255) DEFAULT NULL COMMENT 'ãƒ‘ã‚¹ãƒ¯ãƒ¼ãƒ‰ãƒãƒƒã‚·ãƒ¥'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='ã‚µãƒ¼ãƒ“ã‚¹åˆ©ç”¨è€…ã®ã‚¢ã‚«ã‚¦ãƒ³ãƒˆã‚’ä¿æŒã™ã‚‹';
