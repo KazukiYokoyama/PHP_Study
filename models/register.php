@@ -29,8 +29,8 @@ class Register extends Model{
                     header("Location: /registered");  
                 }else{
                     $errormessage = $account->Get_errorMessage();
-                    if($erormessage){
-                        echo "<script>alert('$erormessage');</script>";
+                    if($errormessage){
+                        echo "<script>alert('$errormessage');</script>";
                     }
                 }
             }
@@ -71,29 +71,35 @@ class Account {
             //データベース接続
             $DB = new DB_Connect();
             $pdo = $DB->getPDO();
+            
             // SQL準備
             $stmt = $pdo->prepare('INSERT INTO Accounts (account_name, email, password_hash)VALUES(:account_name, :email, :password_hash)');
+            
             // プレースホルダの値をセット
             $password_hash = password_hash($this->password, PASSWORD_DEFAULT);
             $stmt->bindParam(':account_name',$this->account_name, PDO::PARAM_STR);
             $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
             $stmt->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
+            
             // ＳＱＬ実行部分
-            $check = $stmt->execute();
-            if($check){
-                echo "<script>alert('アカウントの登録に成功しました！');</script>";
-                $rtnFlg = 1;
-            }
+            $stmt->execute();
+            echo "<script>alert('アカウントの登録に成功しました！');</script>";
+            $rtnFlg = 1;
+            
         }catch(PDOException $e){
             error_log("[". date('Y-m-d H:i:s') . "]アカウント登録エラー：".addslashes($e->getMessage())."\n", 3, "/var/log/php/php_error.log");
-            $this->errorMessage = 'アカウントの登録に失敗しました。\nサイトの管理者に連絡してください。';
+            $this->errorMessage = '登録エラー';
+            if($e->errorInfo[1] == 1062){
+                $this->errorMessage = '既に登録されているアカウントです！';
+            }
             $rtnFlg = 0;
         }
         return $rtnFlg;
     }
 
+    // アカウント登録時の入力チェック
     private function Input_check() {
-        #ユーザ名：未入力チェック
+        // ユーザ名
         if(empty($this->account_name)){
             $this->account_name_errorMessage .= '<p>アカウント名を入力してください。</p>';
         }elseif(!preg_match("/^[a-zA-Z0-9]+$/", $this->account_name)){
@@ -101,13 +107,13 @@ class Account {
         }elseif(strlen($this->account_name)> 20){
             $this->account_name_errorMessage .= '<p>アカウント名は２０文字以下で作成してください。</p>';
         }
-        #Ｅメール：未入力チェック
+        // Ｅメール
         if(empty($this->email)){
             $this->email_errorMessage .= '<p>メールアドレスを入力してください。</p>';
         }elseif(!filter_var($this->email, FILTER_VALIDATE_EMAIL)){
             $this->email_errorMessage .= '<p>メールアドレスの形式が正しくありません。</p>';
         }
-        #パスワード：未入力チェック
+        #パスワード
         if(empty($this->password)){
             $this->password_errorMessage .= '<p>パスワードを入力してください。</p>';
         }elseif(!preg_match("/^[a-zA-Z0-9]+$/", $this->password)){
