@@ -15,18 +15,24 @@ class Register extends Model{
     public function Action(){
         // この中で登録処理を呼び出す
         if (isset($_POST["insert"])){
-            // 入力チェックの結果を取得する
-            $account = new Account();
-            $username_message = $account->Get_account_name_errorMessage();
-            $email_message = $account->Get_email_errorMessage();
-            $password_message = $account->Get_password_errorMessage();
-            if($username_message || $email_message || $password_message){
-                $this->page_data['username_errorMessage'] = $username_message;
-                $this->page_data['email_errorMessage'] = $email_message;
-                $this->page_data['password_errorMessage'] = $password_message;
-            }else{
+
+           // アカウント登録処理を開始
+           $account = new Account();
+
+           // 入力チェックの結果を取得する
+            $this->page_data['username_errorMessage'] = $account->Get_account_name_errorMessage();
+            $this->page_data['email_errorMessage'] = $account->Get_email_errorMessage();
+            $this->page_data['password_errorMessage'] = $account->Get_password_errorMessage();
+
+           // 入力チェックの結果エラーの判定
+           if( !$this->page_data['username_errorMessage'] && 
+               !$this->page_data['email_errorMessage'] && 
+               !$this->page_data['password_errorMessage']
+            ){
+                // 入力されたアカウントをDBに保存する
                 if ($account->Insert_Accounts()){
-                    header("Location: /registered");  
+                    // アカウント登録完了画面に遷移
+                    header("Location: /registered");
                 }else{
                     $errormessage = $account->Get_errorMessage();
                     if($errormessage){
