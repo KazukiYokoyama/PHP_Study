@@ -15,19 +15,26 @@ class Register extends Model{
     public function Action(){
         // この中で登録処理を呼び出す
         if (isset($_POST["insert"])){
-            // 入力チェックの結果を取得する
-            $input_check = new Account();
-            $username_message = $input_check->Get_account_name_errorMessage();
-            $email_message = $input_check->Get_email_errorMessage();
-            $password_message = $input_check->Get_password_errorMessage();
-            if($username_message || $email_message || $password_message){
-                $this->page_data['username_errorMessage'] = $username_message;
-                $this->page_data['email_errorMessage'] = $email_message;
-                $this->page_data['password_errorMessage'] = $password_message;
-            }else{
+
+           // アカウント登録処理を開始
+           $input_check = new Account();
+
+           // 入力チェックの結果を取得する
+            $this->page_data['username_errorMessage'] = $input_check->Get_account_name_errorMessage();
+            $this->page_data['email_errorMessage'] = $input_check->Get_email_errorMessage();
+            $this->page_data['password_errorMessage'] = $input_check->Get_password_errorMessage();
+
+           // 入力チェックの結果エラーの判定
+           if( !$this->page_data['username_errorMessage'] && 
+               !$this->page_data['email_errorMessage'] && 
+               !$this->page_data['password_errorMessage']
+            ){
+                // 入力されたアカウントをDBに保存する
                 if ($input_check->Insert_Accounts()){
-                    header("Location: /registered");  
+                    // アカウント登録完了画面に遷移
+                    header("Location: /registered");
                 }else{
+                    // 登録失敗した場合のエラー処理
                     $errormessage = $input_check->Get_errorMessage();
                     if($errormessage[1] = 1062){
                         echo "<script>alert('既に登録されているアカウントです！');</script>";
