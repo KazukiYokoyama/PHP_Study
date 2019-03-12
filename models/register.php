@@ -17,12 +17,12 @@ class Register extends Model{
         if (isset($_POST["insert"])){
 
            // アカウント登録処理を開始
-           $input_check = new Account();
+           $account = new Account();
 
            // 入力チェックの結果を取得する
-            $this->page_data['username_errorMessage'] = $input_check->Get_account_name_errorMessage();
-            $this->page_data['email_errorMessage'] = $input_check->Get_email_errorMessage();
-            $this->page_data['password_errorMessage'] = $input_check->Get_password_errorMessage();
+            $this->page_data['username_errorMessage'] = $account->Get_account_name_errorMessage();
+            $this->page_data['email_errorMessage'] = $account->Get_email_errorMessage();
+            $this->page_data['password_errorMessage'] = $account->Get_password_errorMessage();
 
            // 入力チェックの結果エラーの判定
            if( !$this->page_data['username_errorMessage'] && 
@@ -30,16 +30,13 @@ class Register extends Model{
                !$this->page_data['password_errorMessage']
             ){
                 // 入力されたアカウントをDBに保存する
-                if ($input_check->Insert_Accounts()){
+                if ($account->Insert_Accounts()){
                     // アカウント登録完了画面に遷移
                     header("Location: /registered");
                 }else{
-                    // 登録失敗した場合のエラー処理
-                    $errormessage = $input_check->Get_errorMessage();
-                    if($errormessage[1] = 1062){
-                        echo "<script>alert('既に登録されているアカウントです！');</script>";
-                    }else{
-                        echo "<script>alert('登録エラー');</script>";
+                    $errormessage = $account->Get_errorMessage();
+                    if($errormessage){
+                        echo "<script>alert('$errormessage');</script>";
                     }
                 }
             }
@@ -52,7 +49,6 @@ class Account {
     private $account_name;              // ユーザ名
     private $email;                     // メールアドレス
     private $password;                  // パスワード
-    private $errorflg;                  // エラーフラグ
     private $errorMessage;              // 汎用エラー
     private $account_name_errorMessage; // ユーザ名エラーメッセージ
     private $email_errorMessage;        // メールアドレスエラーメッセージ
@@ -81,35 +77,35 @@ class Account {
             //データベース接続
             $DB = new DB_Connect();
             $pdo = $DB->getPDO();
+            
             // SQL準備
             $stmt = $pdo->prepare('INSERT INTO Accounts (account_name, email, password_hash)VALUES(:account_name, :email, :password_hash)');
+            
             // プレースホルダの値をセット
             $password_hash = password_hash($this->password, PASSWORD_DEFAULT);
             $stmt->bindParam(':account_name',$this->account_name, PDO::PARAM_STR);
             $stmt->bindParam(':email', $this->email, PDO::PARAM_STR);
             $stmt->bindParam(':password_hash', $password_hash, PDO::PARAM_STR);
+            
             // ＳＱＬ実行部分
-            $check = $stmt->execute();
-            if($check){
-                echo "<script>alert('アカウントの登録に成功しました！');</script>";
-                $rtnFlg = 1;
-            }else{
-                echo "<script>alert('アカウントの登録に失敗しました。');</script>";
-                $rtnFlg = 0;
-            }
+            $stmt->execute();
+            echo "<script>alert('アカウントの登録に成功しました！');</script>";
+            $rtnFlg = 1;
+            
         }catch(PDOException $e){
-            $this->errorMessage = array(
-                0=>$e->errorInfo[0],
-                1=>$e->errorInfo[1],
-                2=>$e->errorInfo[2],
-            );
+            error_log("[". date('Y-m-d H:i:s') . "]アカウント登録エラー：".addslashes($e->getMessage())."\n", 3, "/var/log/php/php_error.log");
+            $this->errorMessage = '登録エラー';
+            if($e->errorInfo[1] == 1062){
+                $this->errorMessage = '既に登録されているアカウントです！';
+            }
             $rtnFlg = 0;
         }
         return $rtnFlg;
     }
 
+    // アカウント登録時の入力チェック
     private function Input_check() {
-        #ユーザ名：未入力チェック
+        // ユーザ名
         if(empty($this->account_name)){
             $this->account_name_errorMessage .= '<p>アカウント名を入力してください。</p>';
         }elseif(!preg_match("/^[a-zA-Z0-9]+$/", $this->account_name)){
@@ -117,13 +113,13 @@ class Account {
         }elseif(strlen($this->account_name)> 20){
             $this->account_name_errorMessage .= '<p>アカウント名は２０文字以下で作成してください。</p>';
         }
-        #Ｅメール：未入力チェック
+        // Ｅメール
         if(empty($this->email)){
             $this->email_errorMessage .= '<p>メールアドレスを入力してください。</p>';
         }elseif(!filter_var($this->email, FILTER_VALIDATE_EMAIL)){
             $this->email_errorMessage .= '<p>メールアドレスの形式が正しくありません。</p>';
         }
-        #パスワード：未入力チェック
+        #パスワード
         if(empty($this->password)){
             $this->password_errorMessage .= '<p>パスワードを入力してください。</p>';
         }elseif(!preg_match("/^[a-zA-Z0-9]+$/", $this->password)){
