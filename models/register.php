@@ -87,10 +87,11 @@ class Account {
             $rtnFlg = 1;
             
         }catch(PDOException $e){
-            error_log("[". date('Y-m-d H:i:s') . "]アカウント登録エラー：".addslashes($e->getMessage())."\n", 3, "/var/log/php/php_error.log");
             $this->errorMessage = '登録エラー';
             if($e->errorInfo[1] == 1062){
                 $this->errorMessage = '既に登録されているアカウントです！';
+            }else{
+                error_log("[". date('Y-m-d H:i:s') . "]アカウント登録エラー：".addslashes($e->getMessage())."\n", 3, "/var/log/php/php_error.log");
             }
             $rtnFlg = 0;
         }
