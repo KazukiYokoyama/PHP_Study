@@ -16,23 +16,21 @@ class Register extends Model{
         // この中で登録処理を呼び出す
         if (isset($_POST["insert"])){
             // 入力チェックの結果を取得する
-            $input_check = new Account();
-            $username_message = $input_check->Get_account_name_errorMessage();
-            $email_message = $input_check->Get_email_errorMessage();
-            $password_message = $input_check->Get_password_errorMessage();
+            $account = new Account();
+            $username_message = $account->Get_account_name_errorMessage();
+            $email_message = $account->Get_email_errorMessage();
+            $password_message = $account->Get_password_errorMessage();
             if($username_message || $email_message || $password_message){
                 $this->page_data['username_errorMessage'] = $username_message;
                 $this->page_data['email_errorMessage'] = $email_message;
                 $this->page_data['password_errorMessage'] = $password_message;
             }else{
-                if ($input_check->Insert_Accounts()){
+                if ($account->Insert_Accounts()){
                     header("Location: /registered");  
                 }else{
-                    $errormessage = $input_check->Get_errorMessage();
-                    if($errormessage[1] = 1062){
-                        echo "<script>alert('既に登録されているアカウントです！');</script>";
-                    }else{
-                        echo "<script>alert('登録エラー');</script>";
+                    $errormessage = $account->Get_errorMessage();
+                    if($erormessage){
+                        echo "<script>alert('$erormessage');</script>";
                     }
                 }
             }
@@ -45,7 +43,6 @@ class Account {
     private $account_name;              // ユーザ名
     private $email;                     // メールアドレス
     private $password;                  // パスワード
-    private $errorflg;                  // エラーフラグ
     private $errorMessage;              // 汎用エラー
     private $account_name_errorMessage; // ユーザ名エラーメッセージ
     private $email_errorMessage;        // メールアドレスエラーメッセージ
@@ -86,16 +83,10 @@ class Account {
             if($check){
                 echo "<script>alert('アカウントの登録に成功しました！');</script>";
                 $rtnFlg = 1;
-            }else{
-                echo "<script>alert('アカウントの登録に失敗しました。');</script>";
-                $rtnFlg = 0;
             }
         }catch(PDOException $e){
-            $this->errorMessage = array(
-                0=>$e->errorInfo[0],
-                1=>$e->errorInfo[1],
-                2=>$e->errorInfo[2],
-            );
+            error_log("[". date('Y-m-d H:i:s') . "]アカウント登録エラー：".addslashes($e->getMessage())."\n", 3, "/var/log/php/php_error.log");
+            $this->errorMessage = 'アカウントの登録に失敗しました。\nサイトの管理者に連絡してください。';
             $rtnFlg = 0;
         }
         return $rtnFlg;
