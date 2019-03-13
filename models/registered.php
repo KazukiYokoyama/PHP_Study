@@ -4,11 +4,10 @@
 //###########################################
 
 class Registered extends Model{
-	protected $page_data = [
-		'page' => 'registered',
-		'layout' => 'public_default',
-		'title' => 'アカウント登録完了'
-	];
+
+	public function Action(){
+		$this->page = new Page('アカウント登録完了', 'registered');
+	}
 }
 
 ?>

@@ -5,12 +5,6 @@
 include ('../module/DBConnect.php');
 
 class Register extends Model{
-	protected $page_data = [
-		'page' => 'register',
-		'layout' => 'public_default',
-		'title' => 'アカウント登録',
-		'errorMessage' => ''
-	];
 
 	public function Action(){
 		// この中で登録処理を呼び出す
@@ -41,6 +35,7 @@ class Register extends Model{
 				}
 			}
 		}
+		$this->page = new Page('アカウント登録', 'register', $this->page_data);
 	}
 }
 

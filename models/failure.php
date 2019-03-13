@@ -4,11 +4,10 @@
 //###########################################
 
 class Failure extends Model{
-	protected $page_data = [
-		'page' => 'failure',
-		'layout' => 'public_default',
-		'title' => 'エラーが発生しました'
-	];
+
+	public function Action(){
+		$this->page = new Page('エラーが発生しました', 'failure');
+	}
 }
 
 ?>
