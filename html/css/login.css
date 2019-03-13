@@ -1,22 +1,22 @@
 .text-outline {
-    border: solid 1px #dc3545;
-    border-radius: 4px;
-    padding: 0 8px;
-    margin-left: 8px;
+	border: solid 1px #dc3545;
+	border-radius: 4px;
+	padding: 0 8px;
+	margin-left: 8px;
 }
 
 .text-error {
-    color: #dc3545;
-    font-size: 90%;
-    margin-bottom: 0;
+	color: #dc3545;
+	font-size: 90%;
+	margin-bottom: 0;
 }
 
 .link-under-line {
-    text-decoration: none;
-    padding-bottom: 0.02rem;
-    border-bottom: 1px solid;
+	text-decoration: none;
+	padding-bottom: 0.02rem;
+	border-bottom: 1px solid;
 }
 
 .link-under-line:hover {
-    text-decoration: none;
+	text-decoration: none;
 }

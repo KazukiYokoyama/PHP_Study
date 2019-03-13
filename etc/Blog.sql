@@ -26,35 +26,39 @@ FLUSH PRIVILEGES;
 
 --  テーブル Blog.Accounts の構造をダンプしています
 DROP TABLE IF EXISTS `Accounts`;
-CREATE TABLE IF NOT EXISTS `Accounts` (
-  `account_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'アカウントID',
-  `account_name` varchar(20) DEFAULT NULL COMMENT 'アカウント名',
-  `email` varchar(100) DEFAULT NULL COMMENT 'メールアドレス',
-  `password_hash` varchar(255) DEFAULT NULL COMMENT 'パスワードハッシュ',
-  PRIMARY KEY (`account_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='サービス利用者のアカウントを保持する';
+CREATE TABLE `Accounts` (
+	`account_id` BIGINT(20) UNSIGNED NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'アカウントID',
+	`account_name` VARCHAR(20) NULL DEFAULT NULL UNIQUE COMMENT 'アカウント名',
+	`email` VARCHAR(100) NULL DEFAULT NULL UNIQUE  COMMENT 'メールアドレス',
+	`password_hash` VARCHAR(255) NULL DEFAULT NULL COMMENT 'パスワードハッシュ'
+)
+COMMENT='サービス利用者のアカウントを保持する'
+COLLATE='utf8_general_ci'
+ENGINE=InnoDB
+AUTO_INCREMENT=6
+;
 
 -- エクスポートするデータが選択されていません
 --  テーブル Blog.Articles の構造をダンプしています
 DROP TABLE IF EXISTS `Articles`;
 CREATE TABLE IF NOT EXISTS `Articles` (
-  `article_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '記事ID',
-  `account_id` bigint(20) unsigned DEFAULT NULL COMMENT 'アカウントID（=Accounts:account_id）',
-  `title` varchar(50) DEFAULT NULL COMMENT 'タイトル',
-  `body` text DEFAULT NULL COMMENT '本文',
-  PRIMARY KEY (`article_id`),
-  KEY `account_id` (`account_id`),
-  CONSTRAINT `Articles_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `Accounts` (`account_id`)
+	`article_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '記事ID',
+	`account_id` bigint(20) unsigned DEFAULT NULL COMMENT 'アカウントID（=Accounts:account_id）',
+	`title` varchar(50) DEFAULT NULL COMMENT 'タイトル',
+	`body` text DEFAULT NULL COMMENT '本文',
+	PRIMARY KEY (`article_id`),
+	KEY `account_id` (`account_id`),
+	CONSTRAINT `Articles_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `Accounts` (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='ブログの記事を保持する';
 
 -- エクスポートするデータが選択されていません
 --  テーブル Blog.Logs の構造をダンプしています
 DROP TABLE IF EXISTS `Logs`;
 CREATE TABLE IF NOT EXISTS `Logs` (
-  `log_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ログID',
-  `date_reported` date DEFAULT NULL COMMENT '発行日付',
-  `description` text DEFAULT NULL COMMENT '内容',
-  PRIMARY KEY (`log_id`)
+	`log_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ログID',
+	`date_reported` date DEFAULT NULL COMMENT '発行日付',
+	`description` text DEFAULT NULL COMMENT '内容',
+	PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='操作ログを保持する';
 
 -- エクスポートするデータが選択されていません
