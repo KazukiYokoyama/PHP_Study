@@ -1,14 +1,14 @@
 <IfModule mod_rewrite.c>
-    RewriteEngine On
-    RewriteCond %{REQUEST_FILENAME} !-d
-    RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteEngine On
+	RewriteCond %{REQUEST_FILENAME} !-d
+	RewriteCond %{REQUEST_FILENAME} !-f
 
-    # 以下の拡張子のものはリダイレクトの対象にしない
-    RewriteCond %{REQUEST_URI} !\.(css|jpe?g|png|js|gif|swf|ico)$
+	# 以下の拡張子のものはリダイレクトの対象にしない
+	RewriteCond %{REQUEST_URI} !\.(css|jpe?g|png|js|gif|swf|ico)$
 
-    # ルートディレクトリ以下を指定された場合、全てindex.phpにリダイレクトさせる
-    RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
+	# ルートディレクトリ以下を指定された場合、全てindex.phpにリダイレクトさせる
+	RewriteRule ^(.*)$ index.php?url=$1 [QSA,L]
 
-    RewriteCond %{THE_REQUEST} ^.*/index.php
-    RewriteRule ^(.*)index.php$ / [R=301,L]
+	RewriteCond %{THE_REQUEST} ^.*/index.php
+	RewriteRule ^(.*)index.php$ / [R=301,L]
 </IfModule>

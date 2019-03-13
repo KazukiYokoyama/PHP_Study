@@ -42,23 +42,23 @@ AUTO_INCREMENT=6
 --  テーブル Blog.Articles の構造をダンプしています
 DROP TABLE IF EXISTS `Articles`;
 CREATE TABLE IF NOT EXISTS `Articles` (
-  `article_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '記事ID',
-  `account_id` bigint(20) unsigned DEFAULT NULL COMMENT 'アカウントID（=Accounts:account_id）',
-  `title` varchar(50) DEFAULT NULL COMMENT 'タイトル',
-  `body` text DEFAULT NULL COMMENT '本文',
-  PRIMARY KEY (`article_id`),
-  KEY `account_id` (`account_id`),
-  CONSTRAINT `Articles_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `Accounts` (`account_id`)
+	`article_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT '記事ID',
+	`account_id` bigint(20) unsigned DEFAULT NULL COMMENT 'アカウントID（=Accounts:account_id）',
+	`title` varchar(50) DEFAULT NULL COMMENT 'タイトル',
+	`body` text DEFAULT NULL COMMENT '本文',
+	PRIMARY KEY (`article_id`),
+	KEY `account_id` (`account_id`),
+	CONSTRAINT `Articles_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `Accounts` (`account_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='ブログの記事を保持する';
 
 -- エクスポートするデータが選択されていません
 --  テーブル Blog.Logs の構造をダンプしています
 DROP TABLE IF EXISTS `Logs`;
 CREATE TABLE IF NOT EXISTS `Logs` (
-  `log_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ログID',
-  `date_reported` date DEFAULT NULL COMMENT '発行日付',
-  `description` text DEFAULT NULL COMMENT '内容',
-  PRIMARY KEY (`log_id`)
+	`log_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT COMMENT 'ログID',
+	`date_reported` date DEFAULT NULL COMMENT '発行日付',
+	`description` text DEFAULT NULL COMMENT '内容',
+	PRIMARY KEY (`log_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 comment='操作ログを保持する';
 
 -- エクスポートするデータが選択されていません
