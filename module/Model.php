@@ -1,4 +1,5 @@
 <?php
+include ('../module/DBConnect.php');
 
 class Model{
 	protected $url = [];        // リクエストされたURL
