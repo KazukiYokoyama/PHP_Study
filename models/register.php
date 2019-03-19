@@ -2,7 +2,6 @@
 //###########################################
 // Model　アカウント登録
 //###########################################
-include ('../module/DBConnect.php');
 
 class Register extends Model{
 
