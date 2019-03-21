@@ -2,7 +2,6 @@
 //###########################################
 // Model　ログイン画面
 //###########################################
-include ('../module/DBConnect.php');
 
 /**
  * ログイン画面出力に必要なパラメータの設定する
@@ -81,31 +80,30 @@ class LoginCheck{
 	public function LoginDecision(){
 		try{
 			//データベース接続
-		   $DB = new DB_Connect();
-		   $pdo = $DB->getPDO();
-		   $stmt = $pdo->prepare('SELECT * FROM Accounts WHERE email = :email');
-		   $stmt->execute([':email'=>$this->email]);
-		   
-		   if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-			   //パスワードのチェック
-			   if(password_verify($this->password, $row["password_hash"])){
-				   //セッションIDの新規取得
-				   session_regenerate_id(true);
+			$pdo = DB_Connect::getPDO();
+			$stmt = $pdo->prepare('SELECT * FROM Accounts WHERE email = :email');
+			$stmt->execute([':email'=>$this->email]);
+			
+			if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+				//パスワードのチェック
+				if(password_verify($this->password, $row["password_hash"])){
+					//セッションIDの新規取得
+					session_regenerate_id(true);
 
-				   //セッションにアカウントIDを格納
-				   $_SESSION["account_id"] = $row['account_id'];
+					//セッションにアカウントIDを格納
+					$_SESSION["account_id"] = $row['account_id'];
 
 
-				   //ホーム画面へ遷移
-				   header("Location: /home");
-				   exit();
-			   }else{
+					//ホーム画面へ遷移
+					header("Location: /home");
+					exit();
+				}else{
 					$this->errorMessage = '<p class="text-danger">ログインエラー：ユーザーIDあるいはパスワードに誤りがあります</p>';
-			   }
-		   }
-	   }catch(PDOException $e){
+				}
+			}
+		}catch(PDOException $e){
 			$this->errorMessage = '<p class="text-danger">データベースエラー:'.$e->getMessage().'</p>';
-	   }
+		}
 	}
 
 	//エラーメッセージの取得
