@@ -18,7 +18,11 @@
 				<div class="form-group text-center">
 					<button type="submit" name="submit" class="btn btn-primary">登録</button>
 					<button type="submit" name="cancel" class="btn btn-Light ml-2 mr-2">キャンセル</button>
-					<button type="submit" name="delet" class="btn btn-danger">削除</button>
+				<?php
+					if ($_GET["article_id"]) {
+						echo '<button type="submit" name="delet" class="btn btn-danger">削除</button>';
+					}
+				?>
 				</div>
 			</form>
 		</div>
