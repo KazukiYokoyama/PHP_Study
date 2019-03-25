@@ -13,7 +13,7 @@
 				</div>
 				<div class="form-group pt-3 pb-3">
 					<label for="textarea1">本文</label>
-					<textarea id="textarea1" class="form-control" rows="10"><?= $this->getData('body') ?></textarea>
+					<textarea id="textarea1" name="body" class="form-control" rows="10"><?= $this->getData('body') ?></textarea>
 				</div>
 				<div class="form-group text-center">
 					<button type="submit" name="submit" class="btn btn-primary">登録</button>
