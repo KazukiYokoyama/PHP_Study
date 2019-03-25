@@ -10,13 +10,3 @@
 	font-size: 90%;
 	margin-bottom: 0;
 }
-
-.link-under-line {
-	text-decoration: none;
-	padding-bottom: 0.02rem;
-	border-bottom: 1px solid;
-}
-
-.link-under-line:hover {
-	text-decoration: none;
-}
