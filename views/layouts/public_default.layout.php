@@ -32,7 +32,7 @@
 					?>
 					<?php
 						//セッションにaccount_idがあればログインしている状態なので、表示するメニューを切り替える
-						if ($_SESSION["account_id"]) {
+						if (isset($_SESSION["account_id"])) {
 							if($this->getData('page') == 'user'){
 								echo '<li class="nav-item active"><a class="nav-link" href="/user">マイページ <span class="sr-only">(current)</span></a></li>';
 							} else {
