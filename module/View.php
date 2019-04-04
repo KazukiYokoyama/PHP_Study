@@ -84,11 +84,19 @@ Class View{
 		require('../views/'.$this->page->getTemplate().'.view.php');
 	}
 
-	// Modelから渡されたデータの取得
-	private function getData(string $property) :string{
+	/**
+	 * Modelから渡されたデータを取得する
+	 *
+	 * @param string $property
+	 * @param integer $no_escape （デフォルト:特殊文字をエスケープする 1:エスケープしない）
+	 * @return string
+	 */
+	private function getData(string $property, int $no_escape=0) :string{
 		$data = $this->page->getData();
 		if(isset($data[$property])){
-			return (string) $data[$property];
+			$data = (string) $data[$property];
+			if($no_escape){ return $data; }
+			return htmlspecialchars($data, ENT_QUOTES);
 		}
 		return '';
 	}
