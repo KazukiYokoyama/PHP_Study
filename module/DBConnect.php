@@ -9,7 +9,7 @@ class DB_Connect{
 	/**
 	 * データベースの接続情報を取得する
 	 */
-	public function getPDO(){
+	public static function getPDO(){
 		//pdoがnullならDBに接続する
 		if(self::$pdo == null){
 			try{
