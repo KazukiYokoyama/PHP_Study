@@ -12,7 +12,9 @@
 					}
 				?>
 				<div class="form-group pt-3">
-					<label for="exampleInputTitle">タイトル<span class="text-danger text-outline small">必須</span></label>
+					<label for="exampleInputTitle">
+						タイトル<span class="text-danger text-outline small">必須</span>
+					</label>
 					<input type="title" name="title" class="form-control" id="exampleInputTitle" value="<?= $this->getData('title') ?>">
 					<?php
 						if ($this->getData('title_error_message')) {
@@ -27,11 +29,11 @@
 				<div class="form-group text-center">
 					<button type="submit" name="submit" class="btn btn-primary" value="submit">登録</button>
 					<button type="button" name="cancel" class="btn btn-Light ml-2 mr-2">キャンセル</button>
-				<?php
-					if (isset($_GET["article_id"])) {
-						echo '<button type="submit" name="delete" class="btn btn-danger" value="delete">削除</button>';
-					}
-				?>
+					<?php
+						if ($this->getData('article_id')) {
+							echo '<button type="submit" name="delete" class="btn btn-danger" value="delete">削除</button>';
+						}
+					?>
 				</div>
 			</form>
 		</div>
