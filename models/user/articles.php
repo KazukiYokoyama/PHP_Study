@@ -1,15 +1,15 @@
 <?php
 //###########################################
-// Model　トップページ
+// Model　記事一覧
 //###########################################
 
 class Articles extends Model{
 
+	/**
+	 * 記事一覧画面の動作
+	 * @return void
+	 */
 	public function Action(){
-		if($_SESSION['account_id']){
-			//$this->page_data['msg'] = 'ログイン中だよ！';
-		}
-
 		$action_request = array_shift($this->url);
 
         // 投稿記事リスト取得
@@ -25,7 +25,9 @@ class Articles extends Model{
 	}
 }
 
-
+/**
+ * 記事リスト
+ */
 class ArticlesList{
 	private $list = [];
 
@@ -33,8 +35,12 @@ class ArticlesList{
 		$this->Search();
 	}
 
+	/**
+	 * 記事検索
+	 * @return void
+	 */
 	private function Search(){
-
+		// ログインしているユーザーの記事を取得
 		$pdo = DB_Connect::getPDO();
 		$stmt = $pdo->prepare('SELECT * FROM Articles WHERE account_id = :account_id');
 		$stmt->bindParam(':account_id', $_SESSION['account_id'], PDO::PARAM_INT);
