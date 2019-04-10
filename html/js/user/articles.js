@@ -6,6 +6,7 @@ var ArticlesList = new Vue({
 	data: {
 		list: []
 	},
+	mixins:[AxiosAjax],
 	methods: {
 		window:onload = function() {
 			// 記事リストを取得する

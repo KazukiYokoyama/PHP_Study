@@ -10,7 +10,7 @@
 			</tr>
 			<tr v-for="(item, i) in list" :key="item">
 				<td>{{ item.article_id }}</td>
-				<td>{{ item.title }}</td>
+				<td><a v-bind:href="'/user/articleedit/'+item.article_id">{{ item.title }}</a></td>
 			</tr>
 		</table>
 	</div>
