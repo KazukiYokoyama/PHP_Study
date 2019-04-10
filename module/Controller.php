@@ -28,16 +28,21 @@ Class Controller{
 	 */
 	public function Main(){
 		$page = [];    // ページで使用する情報
+		$include_file = $this->page;
+		if($include_file === 'user'){
+			$this->page = array_shift($this->url);
+			$include_file .= '/'.$this->page;
+		}
 		// Modelの処理を実行
-		if(file_exists('../models/'.$this->page.'.php')){
-			include_once ('../models/'.$this->page.'.php');
+		if(file_exists('../models/'.$include_file.'.php')){
+			include_once ('../models/'.$include_file.'.php');
 			// Modelから実行結果を取得
 			$model = new $this->page($this->url);
 			$model->Action();
 			$page = $model->getPage();
 		}
-		if ($this->page === '404'){
-			$page = new Page('404 not found', $this->page);
+		if ($include_file === '404'){
+			$page = new Page('404 not found', $include_file);
 		}
 		// 編集したページを表示
 		$view = new View($page);

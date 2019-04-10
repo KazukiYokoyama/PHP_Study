@@ -36,7 +36,7 @@
 							if($this->getData('page') == 'user'){
 								echo '<li class="nav-item active"><a class="nav-link" href="/user">マイページ <span class="sr-only">(current)</span></a></li>';
 							} else {
-								echo '<li class="nav-item"><a class="nav-link" href="/user">マイページ</a></li>';
+								echo '<li class="nav-item"><a class="nav-link" href="/user/articles">マイページ</a></li>';
 							}
 							if($this->getData('page') == 'logout'){
 								echo '<li class="nav-item active"><a class="nav-link" href="/logout">ログアウト <span class="sr-only">(current)</span></a></li>';
