@@ -4,11 +4,6 @@
 //###########################################
 
 class Login extends Model{
-    protected $page_data = [
-        'page' => 'login',
-        'layout' => 'public_default',
-        'title' => 'ログイン画面'
-    ];
 
     /**
      * ログイン画面の動作
@@ -24,7 +19,9 @@ class Login extends Model{
             // APIレスポンス返却
             echo json_encode($result);
             exit;
-        }
+		}
+
+		$this->page = new Page('ログイン画面', 'login', $this->page_data);
     }
 }
 

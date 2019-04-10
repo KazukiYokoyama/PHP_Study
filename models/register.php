@@ -4,11 +4,6 @@
 //###########################################
 
 class Register extends Model{
-    protected $page_data = [
-        'page' => 'register',
-        'layout' => 'public_default',
-        'title' => 'アカウント登録'
-    ];
 
     /**
      * アカウント登録画面の動作
@@ -25,6 +20,8 @@ class Register extends Model{
             echo json_encode($result);
             exit;
         }
+
+        $this->page = new Page('アカウント登録', 'register', $this->page_data);
     }
 }
 

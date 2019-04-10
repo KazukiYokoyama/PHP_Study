@@ -2,11 +2,11 @@
 
 include_once ('../module/Controller.php');
 include_once ('../module/Model.php');
+include_once ('../module/View.php');
 
-// URL取得
-$url = explode('/', filter_input(INPUT_GET, 'url'));
+include_once ('../module/Common.php');
 
-$Controller = new Controller($url);
+$Controller = new Controller();
 $Controller->main();
 
 exit;
