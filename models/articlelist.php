@@ -29,7 +29,7 @@ class Article{
 
 	function __construct(){
 		// 画面から送信された内容を取得
-        $this->account_id = $_POST['account_id'];
+        $this->account_id = 6;//$_POST['account_id'];
         if(!isset($this->account_id)){
 			$this->account_id = '';
 		}
@@ -57,9 +57,21 @@ class Article{
         $td = "";
         $i = 1;
         foreach($this->rows as $row){
-            $td .= "<tr><td>".$i."</td><td>".$row['title']."</td>";
-            $td .= "<td><input type='button' value='編集' onclick='./user/articles_edit/'.$row['article_id']>";
-            $td .= "<input type='button' value='削除' onclick=''></td></tr>";
+            $article_id = $row['article_id'];
+            $title = $row['title'];
+            // $td .= "<tr><td>".$i."</td><td>".$row['title']."</td>";
+            // $td .= "<td><input type='button' value='編集' onclick='./user/articles_edit/'.$row['article_id']> ";
+            // $td .= "<input type='button' value='削除' > <!--onclick=''>--></td></tr>";
+$td .= <<<EOT
+    <tr>
+        <td>$i</td>
+        <td>$title</td>
+        <td>
+            <button type="button" class="update" onclick="location.href='./user/articles_edit/$article_id'">編集</button>
+            <button type="submit" class="delete">削除</button>
+        </td>
+    </tr>
+EOT;
             $i++;
         }
         return $td;
