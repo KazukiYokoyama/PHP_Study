@@ -2,7 +2,6 @@
 //###########################################
 // Model　ブログ記事一覧
 //###########################################
-// include ('../module/DBConnect.php');
 
 // 入ってきたユーザの作った記事を一覧表示する
 class Articlelist extends Model{
@@ -47,9 +46,17 @@ class Article{
         return;
     }
 
+    
+
     // ヘッダー
     public function Set_header(){
-        return "<tr><th>No.</th><th>タイトル</th><th></th></tr>";
+return <<<EOT
+    <tr>
+        <th>No.</th>
+        <th>タイトル</th>
+        <th></th>
+    </tr>
+EOT;
     }
             
     // データセット
@@ -59,9 +66,6 @@ class Article{
         foreach($this->rows as $row){
             $article_id = $row['article_id'];
             $title = $row['title'];
-            // $td .= "<tr><td>".$i."</td><td>".$row['title']."</td>";
-            // $td .= "<td><input type='button' value='編集' onclick='./user/articles_edit/'.$row['article_id']> ";
-            // $td .= "<input type='button' value='削除' > <!--onclick=''>--></td></tr>";
 $td .= <<<EOT
     <tr>
         <td>$i</td>
