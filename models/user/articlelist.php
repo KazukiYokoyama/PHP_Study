@@ -33,7 +33,7 @@ class Article{
 
 	function __construct(){
 		// 画面から送信された内容を取得
-        $this->account_id = 6;//$_POST['account_id'];
+        $this->account_id = $_SESSION["account_id"];
         if(!isset($this->account_id)){
 			$this->account_id = '';
 		}
