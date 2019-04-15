@@ -9,6 +9,11 @@ class Articlelist extends Model{
         
         // 記事一覧を取得する
         $Article = new Article();
+        
+        if(isset($_POST['del'])){
+            $Article->Del_Article($_POST['del']);
+        }
+        
         $Article->Get_ArticleList();
 
         // 動的にtableを作成する
@@ -16,7 +21,7 @@ class Articlelist extends Model{
         $this->page_data['articlelist'] .= $Article->Set_data();
 
         // return maketbth(row);
-        $this->page = new Page('記事一覧', 'articlelist', $this->page_data);
+        $this->page = new Page('記事一覧', 'user/articlelist', $this->page_data);
 
     }
 
@@ -46,7 +51,15 @@ class Article{
         return;
     }
 
-    
+    public function Del_Article($del_id){
+        // ユーザID、記事IDに一致する記事を削除する
+        $pdo = DB_Connect::getPDO();
+        $stmt = $pdo->prepare('DELETE FROM Articles WHERE account_id = :account_id AND article_id = :article_id');
+        $stmt->bindValue(':account_id', $this->account_id);
+        $stmt->bindValue(':article_id', $del_id);
+        $stmt->execute();
+        return;
+    }
 
     // ヘッダー
     public function Set_header(){
@@ -72,7 +85,7 @@ $td .= <<<EOT
         <td>$title</td>
         <td>
             <button type="button" class="update" onclick="location.href='./user/articles_edit/$article_id'">編集</button>
-            <button type="submit" class="delete">削除</button>
+            <button type="submit" class="delete" name="del" value="$article_id">削除</button>
         </td>
     </tr>
 EOT;
