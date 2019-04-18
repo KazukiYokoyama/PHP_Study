@@ -17,8 +17,7 @@ class Articlelist extends Model{
         $Article->Get_ArticleList();
 
         // 動的にtableを作成する
-        $this->page_data['articlelist'] = $Article->Set_header();
-        $this->page_data['articlelist'] .= $Article->Set_data();
+        $this->page_data['articlelist'] = $Article->Set_data();
 
         // return maketbth(row);
         $this->page = new Page('記事一覧', 'user/articlelist', $this->page_data);
@@ -27,6 +26,9 @@ class Articlelist extends Model{
 
 }
 
+/**
+ * 記事一覧クラス
+ */
 class Article{
     private $account_id;                    // アカウントＩＤ
     private $rows;                          // 記事一覧
@@ -39,6 +41,9 @@ class Article{
 		}
     }
     
+    /**
+     * 記事一覧の取得
+     */
     public function Get_ArticleList(){
         // ユーザIDに一致する記事の一覧を返却する
         $pdo = DB_Connect::getPDO();
@@ -51,6 +56,9 @@ class Article{
         return;
     }
 
+    /**
+     * 記事の削除
+     */
     public function Del_Article($del_id){
         // ユーザID、記事IDに一致する記事を削除する
         $pdo = DB_Connect::getPDO();
@@ -61,17 +69,6 @@ class Article{
         return;
     }
 
-    // ヘッダー
-    public function Set_header(){
-return <<<EOT
-    <tr>
-        <th>No.</th>
-        <th>タイトル</th>
-        <th></th>
-    </tr>
-EOT;
-    }
-            
     // データセット
     public function Set_data(){
         $td = "";
