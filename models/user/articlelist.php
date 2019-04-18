@@ -69,7 +69,9 @@ class Article{
         return;
     }
 
-    // データセット
+    /**
+     * 記事一覧の作成
+     */
     public function Set_data(){
         $td = "";
         $i = 1;
