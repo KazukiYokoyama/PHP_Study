@@ -27,7 +27,7 @@ class Articlelist extends Model{
 }
 
 /**
- * 記事一覧クラス
+ * 記事一覧
  */
 class Article{
     private $account_id;                    // アカウントＩＤ
@@ -43,6 +43,8 @@ class Article{
     
     /**
      * 記事一覧の取得
+     *
+     * @return void
      */
     public function Get_ArticleList(){
         // ユーザIDに一致する記事の一覧を返却する
@@ -58,6 +60,9 @@ class Article{
 
     /**
      * 記事の削除
+     *
+     * @param string 削除する記事ID
+     * @return void
      */
     public function Del_Article($del_id){
         // ユーザID、記事IDに一致する記事を削除する
@@ -71,6 +76,8 @@ class Article{
 
     /**
      * 記事一覧の作成
+     *
+     * @return 記事一覧
      */
     public function Set_data(){
         $td = "";
