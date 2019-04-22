@@ -12,5 +12,6 @@ class Logout extends Model{
     public function Action(){
         session_destroy();
         header("Location: /home");
+        exit;
     }
 }

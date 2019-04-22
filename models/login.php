@@ -114,10 +114,11 @@ class LoginAuthentication{
 	 * @return void
 	 */
 	private function Authentication(){
+		$email = $this->form->getEmail();
 		// フォームに入力されたメールアドレスに一致するアカウントを取得する
 		$pdo = DB_Connect::getPDO();
 		$stmt = $pdo->prepare('SELECT * FROM Accounts WHERE email = :email');
-		$stmt->bindParam(':email', $this->form->getEmail(), PDO::PARAM_STR);
+		$stmt->bindParam(':email', $email, PDO::PARAM_STR);
 		$stmt->execute();
 
 		if($Account = $stmt->fetch(PDO::FETCH_ASSOC)) {
