@@ -30,9 +30,19 @@ Class Controller{
 		$page = [];    // ページで使用する情報
 		$include_file = $this->page;
 		if($include_file === 'user'){
+			if(!$_SESSION["account_id"]){
+				header("Location: /login");
+			}
 			$this->page = array_shift($this->url);
 			$include_file .= '/'.$this->page;
 		}
+
+		// ページが無い場合、404（Not Found）を表示する
+		if(!file_exists('../views/'.$include_file.'.view.php')){
+			header("HTTP/1.0 404 Not Found");
+			header("Location: /404");
+		}
+
 		// Modelの処理を実行
 		if(file_exists('../models/'.$include_file.'.php')){
 			include_once ('../models/'.$include_file.'.php');
@@ -44,6 +54,7 @@ Class Controller{
 		if ($include_file === '404'){
 			$page = new Page('404 not found', $include_file);
 		}
+
 		// 編集したページを表示
 		$view = new View($page);
 		$view->Print();

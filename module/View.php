@@ -68,15 +68,7 @@ Class View{
 	 * ページの内容を表示する
 	 */
 	public function Print(){
-		if(file_exists('../views/'.$this->page->getTemplate().'.view.php')){
-			// ページが有る場合、指定のレイアウトを読み込む
-			// 分かりづらいが、レイアウトの方でBody()を呼び出している
 			require('../views/layouts/'.$this->page->getLayout().'.layout.php');
-		}else{
-			// ページが無い場合、404（Not Found）を表示する
-			header("HTTP/1.0 404 Not Found");
-			header("Location: /404");
-		}
 	}
 
     // bodyの読み込み
