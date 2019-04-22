@@ -19,7 +19,7 @@ class ArticleEdit extends Model{
 			$ArticleEditForm = new ArticleEditForm();
 			$ArticleEditForm->Save();
 			$result = $ArticleEditForm->getResult();
-            // APIレスポンス返却
+            // APIレスポンス
             echo json_encode($result);
             exit;
 		}
@@ -29,10 +29,13 @@ class ArticleEdit extends Model{
 	}
 }
 
+/**
+ * 記事編集フォーム
+ */
 class ArticleEditForm{
-	private $article_id;
-	private $title;
-	private $body;
+	private $article_id;	// 記事ID
+	private $title;			// タイトル
+	private $body;			// 本文
 	private $result = [
 		'Success' => '',
 		'Alert' => [
@@ -40,6 +43,9 @@ class ArticleEditForm{
 		]
 	];
 
+	/**
+	 * POSTデータの取得と各種入力チェックを実行
+	 */
 	function __construct(){
 		$this->article_id = PF($_POST['article_id']);
 		$this->title = PF($_POST['title']);
@@ -55,7 +61,7 @@ class ArticleEditForm{
     private function validationTitle(){
         if(empty($this->title)){
 			$this->result['Alert']['Warning']['title'] = 'タイトルの入力がありません';
-        }
+		}
     }
 
 	/**
@@ -98,6 +104,11 @@ class Article{
 	private $Article = [];
 	private $article_id;
 
+	/**
+	 * 引数のIDと一致する記事を検索する
+	 *
+	 * @param [type] $article_id
+	 */
 	function __construct($article_id){
 		$this->article_id = $article_id;
 		$this->Search();
@@ -109,7 +120,7 @@ class Article{
 	 */
 	private function Search(){
 		$pdo = DB_Connect::getPDO();
-		$stmt = $pdo->prepare('SELECT * FROM Articles WHERE account_id = :account_id AND article_id = :article_id');
+		$stmt = $pdo->prepare('SELECT article_id, title, body FROM Articles WHERE account_id = :account_id AND article_id = :article_id');
 		$stmt->bindParam(':account_id', $_SESSION['account_id'], PDO::PARAM_INT);
 		$stmt->bindParam(':article_id', $this->article_id, PDO::PARAM_INT);
 		$stmt->execute();

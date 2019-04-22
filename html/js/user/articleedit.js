@@ -1,10 +1,14 @@
 /**
- * 記事リスト
+ * 記事投稿フォーム
  */
 var ArticleUpdate = new Vue({
 	el: '#ArticleEditForm',
 	data: {
-		Article:{},
+		// 入力項目
+		Article:{
+			title:'',
+			body:''
+		},
 		// アラートメッセージ
 		Alert:{
 			Warning:[]
@@ -16,6 +20,14 @@ var ArticleUpdate = new Vue({
 		let article_json_data = JSON.parse(article_data.textContent);
 		if(article_json_data){
 			this.Article = article_json_data;
+		}
+	},
+	computed: {
+		isErrorTitle(){
+			return this.Alert.Warning.title;
+		},
+		isErrorBody(){
+			return this.Alert.Warning.body;
 		}
 	},
 	methods:{
@@ -41,6 +53,9 @@ var ArticleUpdate = new Vue({
 			.catch(function (error){
 				ArticleUpdate.AjaxError(error);
 			});
+		},
+		back(){
+			location.href="/user/articles";
 		}
 	}
 });

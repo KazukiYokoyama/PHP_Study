@@ -1,12 +1,20 @@
 /**
  * 記事リスト
  */
-var ArticlesList = new Vue({
-	el: '#articles_list',
+var Articles = new Vue({
+	el: '#Articles',
 	data: {
-		list: []
+		list: [
+			article_id=> '',
+			title=> ''
+		]
 	},
 	mixins:[AxiosAjax],
+	computed: {
+		ListCount(){
+			return this.list.length > 0;
+		}
+	},
 	methods: {
 		window:onload = function() {
 			// 記事リストを取得する
@@ -14,7 +22,7 @@ var ArticlesList = new Vue({
 			axios.post('/user/articles/list', params, axios_post_config)
 			.then(function(res){
 				// 記事リストを表示
-				ArticlesList.list = res.data;
+				Articles.list = res.data;
 			})
 			.catch(function (error){
 				this.AjaxError(error);
