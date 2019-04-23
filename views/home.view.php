@@ -13,7 +13,7 @@
 					<template v-if="ListCount">
 						<tr v-for="item in list" :key="item.article_id">
 							<td>
-								<a v-bind:href="'/user/articleedit/'+item.article_id">{{ item.title }}</a>
+								<a v-bind:href="'/article_detail/'+item.account_name+'/'+item.article_id">{{ item.title }}</a>
 							</td>
 							<td>{{ item.account_name }}</td>
 						</tr>
