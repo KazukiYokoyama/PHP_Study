@@ -24,40 +24,40 @@
 			<div class="collapse navbar-collapse" id="navbarNav">
 				<ul class="navbar-nav">
 					<?php
-						if ($this->getData('page') == 'home') {
-							echo '<li class="nav-item active"><a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a></li>';
-						} else {
-							echo '<li class="nav-item"><a class="nav-link" href="/home">Home</a></li>';
-						}
-					?>
+                        if ($this->getData('page') == 'home') {
+                            echo '<li class="nav-item active"><a class="nav-link" href="/home">Home <span class="sr-only">(current)</span></a></li>';
+                        } else {
+                            echo '<li class="nav-item"><a class="nav-link" href="/home">Home</a></li>';
+                        }
+                    ?>
 					<?php
-						//セッションにaccount_idがあればログインしている状態なので、表示するメニューを切り替える
-						if ($_SESSION["account_id"]) {
-							if($this->getData('page') == 'user'){
-								echo '<li class="nav-item active"><a class="nav-link" href="/user">マイページ <span class="sr-only">(current)</span></a></li>';
-							} else {
-								echo '<li class="nav-item"><a class="nav-link" href="/user">マイページ</a></li>';
-							}
+                        //セッションにaccount_idがあればログインしている状態なので、表示するメニューを切り替える
+                        if ($_SESSION["account_id"]) {
+                            if ($this->getData('page') == 'user/articles') {
+                                echo '<li class="nav-item active"><a class="nav-link" href="/user/articles">マイページ <span class="sr-only">(current)</span></a></li>';
+                            } else {
+                                echo '<li class="nav-item"><a class="nav-link" href="/user/articles">マイページ</a></li>';
+                            }
+                            
+                            if ($this->getData('page') == 'logout') {
+                                echo '<li class="nav-item active"><a class="nav-link" href="/logout">ログアウト <span class="sr-only">(current)</span></a></li>';
+                            } else {
+                                echo '<li class="nav-item"><a class="nav-link" href="/logout">ログアウト</a></li>';
+                            }
+                        } else {
+                            if ($this->getData('page') == 'register') {
+                                echo '<li class="nav-item active"><a class="nav-link" href="/register">アカウント登録 <span class="sr-only">(current)</span></a></li>';
+                            } else {
+                                echo '<li class="nav-item"><a class="nav-link" href="/register">アカウント登録</a></li>';
+                            }
 
-							if($this->getData('page') == 'logout'){
-								echo '<li class="nav-item active"><a class="nav-link" href="/logout">ログアウト <span class="sr-only">(current)</span></a></li>';
-							} else {
-								echo '<li class="nav-item"><a class="nav-link" href="/logout">ログアウト</a></li>';
-							}
-						} else {
-							if($this->getData('page') == 'register'){
-								echo '<li class="nav-item active"><a class="nav-link" href="/register">アカウント登録 <span class="sr-only">(current)</span></a></li>';
-							} else {
-								echo '<li class="nav-item"><a class="nav-link" href="/register">アカウント登録</a></li>';
-							}
-
-							if($this->getData('page') == 'login'){
-								echo '<li class="nav-item active"><a class="nav-link" href="/login">ログイン <span class="sr-only">(current)</span></a></li>';
-							} else {
-								echo '<li class="nav-item"><a class="nav-link" href="/login">ログイン</a></li>';
-							}
-						} 
-					?>
+                            if ($this->getData('page') == 'login') {
+                                echo '<li class="nav-item active"><a class="nav-link" href="/login">ログイン <span class="sr-only">(current)</span></a></li>';
+                            } else {
+                                echo '<li class="nav-item"><a class="nav-link" href="/login">ログイン</a></li>';
+                            }
+                        }
+                    ?>
 				</ul>
 			</div>
 			<form class="form-inline">
