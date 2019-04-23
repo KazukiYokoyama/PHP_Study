@@ -4,7 +4,7 @@
 //###########################################
 
 // 入ってきたユーザの作った記事を一覧表示する
-class Articlelist extends Model{
+class articles extends Model{
     public function Action(){
         
         // 記事一覧を取得する
@@ -14,13 +14,13 @@ class Articlelist extends Model{
             $Article->Del_Article($_POST['del']);
         }
         
-        $Article->Get_ArticleList();
+        $Article->Get_articles();
 
         // 動的にtableを作成する
-        $this->page_data['articlelist'] = $Article->Set_data();
+        $this->page_data['articles'] = $Article->Set_data();
 
         // return maketbth(row);
-        $this->page = new Page('記事一覧', 'user/articlelist', $this->page_data);
+        $this->page = new Page('記事一覧', 'user/articles', $this->page_data);
 
     }
 
@@ -46,7 +46,7 @@ class Article{
      *
      * @return void
      */
-    public function Get_ArticleList(){
+    public function Get_articles(){
         // ユーザIDに一致する記事の一覧を返却する
         $pdo = DB_Connect::getPDO();
         $stmt = $pdo->prepare('SELECT * FROM Articles WHERE account_id = :account_id');
@@ -90,7 +90,7 @@ $td .= <<<EOT
         <td>$i</td>
         <td>$title</td>
         <td>
-            <button type="button" class="update" onclick="location.href='./user/articles_edit/$article_id'">編集</button>
+            <button type="button" class="update" onclick="location.href='./articles_edit/$article_id'">編集</button>
             <button type="submit" class="delete" name="del" value="$article_id">削除</button>
         </td>
     </tr>

@@ -3,7 +3,7 @@
 		<h1>記事一覧</h1>
 		<p>
 			<form method="POST">
-			<button type="button" onclick="location.href='./user/articles_edit'">新規作成</button>
+			<button type="button" onclick="location.href='./articles_edit'">新規作成</button>
 				<div class="form-group">
 					<table border="1" width="500" cellspacing="0" cellpadding="5" bordercolor="#333333">
 						<tr>
@@ -11,7 +11,7 @@
 							<th>タイトル</th>
 							<th></th>
 						</tr>
-						<?= $this->getData('articlelist'); ?>
+						<?= $this->getData('articles'); ?>
 					</table>
 				</div>
 			</form>
