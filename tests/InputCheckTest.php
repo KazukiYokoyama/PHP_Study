@@ -9,7 +9,7 @@ include ('module/InputCheck.php');
 class InputCheckTest extends TestCase{
 	private $target;
 
-	public function setUp(){
+	public function setUp() :void{
 		$this->target = $this->getMockForTrait(InputCheck::class);
 	}
 	
